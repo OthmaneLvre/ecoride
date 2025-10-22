@@ -51,11 +51,11 @@ US13 - Espace administrateur
 
 ## Annexes 
 
-- Charte graphique en PDF 
+- Charte graphique en PDF -> ./docs/charte-graphique.pdf
 - Fichier SQL 
 - Manuel d'utilisation en PDF 
 - Documentation technique 
-- Docuementation gestion de projet 
+- Documentation gestion de projet 
 
 ## Liens utiles 
 
