@@ -1,0 +1,315 @@
+/* EcoRide - FEUILLE DE STYLE CSS */
+
+/* 1. RÉINITIALISATION / RESET */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+
+/* 2. VARIABLES CSS (couleurs, polices) */
+
+:root {
+    --primary: #4CAF50;
+    --secondary: #1F3D2B;
+    --background: #F0F5F1;
+    --card-background: #E5E4D7;
+    --text-dark: #333333;
+    --text-light: #FFFFFF;
+
+    --font-primary: 'Segoe UI', sans-serif;
+    --font-secondary: 'Poppins', sans-serif; 
+}
+
+
+/* 3. TYPOGRAPHIE GLOBAL */
+
+body {
+    font-family: var(--font-secondary);
+    font-size: 16px;
+    color: var(--text-dark);
+    background-color: #FFFFFF;
+    line-height: 1.6;
+}
+
+/* Titres */
+
+h1,h2, h3 {
+    font-family: var(--font-primary);
+    color: var(--text-dark);
+}
+
+h1 {
+    font-size: 2.5rem;
+}
+
+h2 {
+    font-size: 2rem;
+}
+
+h3 {
+    font-size: 1.5rem;
+}
+
+/* Paragraphes */
+
+p {
+    margin-bottom: 1rem;
+}
+
+/* 4. CLASSES UTILITAIRES */ 
+
+.container {
+    width: 90%;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.text-center {
+    text-align: center;
+}
+
+/* 5. COMPOSANTS UI */
+
+/* Bouton Principal */
+.btn-primary {
+    background-color: var(--primary);
+    color: var(--text-light);
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 6px;
+    font-family: var(--font-primary);
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+/* Effet au survol */
+.btn-primary:hover {
+    background-color: #388E3C;
+    box-shadow: 0 4px 8px rgba(#333333, 0.2);
+}
+
+
+/* SECTION 1 : Présentation du covoiturage */
+
+.presentation-covoiturage {
+    padding: 80px 0;
+    background-color: var(--background);
+    min-height: 600px;
+}
+
+.presentation-covoiturage .container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 40px;
+    gap: 60px;
+}
+
+.text-column {
+    flex: 1;
+}
+
+.titre-principal {
+    font-family: 'Segoe UI', sans-serif;
+    font-size: 32px;
+    color: var(--text-dark);
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.sous-titre {
+    font-family: 'Poppins', sans-serif;
+    font-size: 16px;
+    color: var(--secondary);
+    text-align: center;
+    line-height: 1.6;
+}
+
+.image-column {
+    flex: 1;
+    text-align: right;
+}
+
+.image-column img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 12px;
+}
+
+/* Conteneur des deux boutons */ 
+
+.cta-buttons {
+    margin-top: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+/* Bouton secondaire - Blanc bordure verte */ 
+.btn-secondary {
+    background-color: white;
+    color: var(--secondary);
+    border: 1px solid var(--primary);
+    padding: 8px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.05);
+}
+
+.btn-secondary:hover {
+    box-shadow: 2px 2px 6px rgba(27, 66, 51, 0.2);
+}
+
+/*SECTION 2 : Barre de recherche */
+
+.search-section {
+    background-color: #FFFFFF;
+    padding: 40px 20px;
+    display: flex;
+    justify-content: center;
+}
+
+.search-bar {
+    display: flex;
+    background-color: var(--background);
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.25);
+    border-radius: 12px;   
+    padding: 20px;
+    gap: 16px;
+    align-items: center;
+    flex-wrap: wrap; 
+}
+
+/* bloc d'un champ avec icône */ 
+
+.search-field {
+    background-color: var(--card-background);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    padding: 10px 16px;
+    gap: 8px;
+}
+
+/* Icône à gauche */
+
+.search-field .icon {
+    width: 18px;
+    height: 18px;
+    object-fit: contain;
+}
+
+/* Champ de saisie */ 
+.search-field input {
+    border: none;
+    background: transparent;
+    font-family: var(--font-secondary);
+    font-size: 14px;
+    color: var(--text-dark);
+    outline: none;
+}
+
+/* Bouton de recherche */ 
+
+.search-button {
+    background-color: var(--primary);
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-family: var(--font-secondary);
+    transition: box-shadow 0.3 ease;
+}
+
+/* SECTION 3 : Présentation entreprise */
+
+.presentation-entreprise {
+    padding: 80px 0;
+    background-color: var(--background);
+    min-height: 600px;
+}
+
+.presentation-entreprise .container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 40px;
+    gap: 60px;
+}
+
+.image-column-entreprise {
+    flex: 1;
+    text-align: left;
+}
+
+.image-column-entreprise img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 12px;
+}
+
+
+    /* FOOTER */   
+
+.footer {
+    background-color: #1F3D2B;
+    color: white;
+    text-align: center;
+    padding: 30px 20px;
+    font-size: 0.9rem;
+}
+
+.footer-logo img {
+    width: 50px;
+    margin-bottom: 15px;
+}
+
+.footer-links {
+    list-style: none;
+    padding: 0;
+    margin-bottom: 15px;
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    flex-wrap: wrap;
+}
+
+.footer-links a {
+    color: white;
+    text-decoration: none;
+}
+
+.footer-contact {
+    margin-bottom: 10px;
+}
+
+.footer-contact .icon-mail {
+    width: 16px;
+    vertical-align: middle;
+    margin-right: 5px;
+}
+
+.footer-bottom {
+    font-size: 0.8rem;
+    opacity: 0.7;
+}
+
+.footer-bottom a {
+    color: white;
+    text-decoration: underline;
+    margin-right: 5px;
+}
