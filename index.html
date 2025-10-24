@@ -18,12 +18,62 @@
 <body>
     <!-- Contenu du site -->
 
-     <!-- SECTION navbar -->
-      <!-- A venir - US2 -->
+     <!-- SECTION navbar (DESKTOP) -->
+     <header class="navbar">
+        <div class="container-nav">
+
+              <!-- Icône du menu burger (mobile) -->
+               <div class="burger">
+                <span></span>
+                <span></span>
+                <span></span>
+               </div>
+
+            <!-- Logo icône seul pour Ecoride -->
+             <a href="index.html" class="logo">
+                <img src="assets/logo-footer.png" alt="EcoRide logo">
+             </a>
+
+             <!-- Menu de navigation -->
+              <nav class="nav-links">
+                <!-- Liens à gauche -->
+                <ul class="nav-left">
+                    <li><a href="index.html">Accueil</a></li>
+                    <li><a href="listings.html">Covoiturage</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                </ul>    
+
+                <!-- Liens à droite -->
+                <ul class="nav-right">
+                    <li><a href="login.html">Connexion</a></li>
+                    <li><a href="register.html">Inscription</a></li>  
+                </ul>
+              </nav>
+
+               <!-- Menu mobile overlay -->
+                <div class="mobile-menu" id="mobileMenu">
+                    <ul class="nav-left">
+                        <li><a href="index.html">Accueil</a></li>
+                        <li><a href="listings.html">Covoiturage</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                    </ul>
+                    <hr>
+                    <ul class="nav-right">
+                        <li><a href="login.html">Connexion</a></li>
+                        <li><a href="register.html">Inscription</a></li>
+                    </ul>
+                </div>
+        </div>
+     </header> 
        
      <!-- SECTION 1 : Présentation du covoiturage --> 
         <section class="presentation-covoiturage">
             <div class="container">
+
+                <div class="image-column">
+                    <img src="assets/images/illustration-covoiturage.jpg" alt="Illustration d'un covoiturage"/>
+                </div>  
+
                 <div class="text-column">
                     <h1 class="titre-principal">Le covoiturage écoresponsable, simple et local.</h1>
                     <p class="sous-titre">
@@ -36,9 +86,6 @@
                     </div>    
                 </div>
 
-                <div class="image-column">
-                    <img src="assets/images/illustration-covoiturage.jpg" alt="Illustration d'un covoiturage"/>
-                </div>    
             </div>
         </section>
      <!-- SECTION 2 : Barre de recherche -->
@@ -72,18 +119,20 @@
      <!-- SECTION 3 : Présentation entreprise --> 
            <section class="presentation-entreprise">
             <div class="container">
+
+                <div class="image-column-entreprise">
+                    <img src="assets/images/illustration-presentation.jpg" alt="Illustration de personnes heureuse"/>
+                </div>   
+
                 <div class="text-column">
                     <h1 class="titre-principal">Qui sommes-nous ?</h1>
                     <p class="sous-titre">
                         EcoRide est une plateforme de covoiturage écoresponsable dédiée aux trajets du quotidien. Nous mettons en relation conducteurs et passagers souhaitant partager leurs trajets locaux, afin de réduire les émissions de CO₂ et favoriser une mobilité plus durable. Ensemble, agissons pour un avenir plus vert et plus solidaire, un trajet à la fois.
                     </p>
-                </div>
-
-                <div class="image-column-entreprise">
-                    <img src="assets/images/illustration-presentation.jpg" alt="Illustration de personnes heureuse"/>
-                </div>    
+                </div> 
             </div>
-            
+           </section>
+
     <!-- FOOTER -->        
             <footer class="footer">
                 <div class="footer-logo">
@@ -103,6 +152,10 @@
                 </div>
             </footer>
 
+<<<<<<< HEAD
 
+=======
+<script src="js/main.js"></script>
+>>>>>>> feature/us2-menu
 </body>
 </html>

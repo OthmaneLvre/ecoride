@@ -81,7 +81,7 @@ p {
 .btn-primary {
     background-color: var(--primary);
     color: var(--text-light);
-    padding: 0.75rem 1.5rem;
+    padding: 8px 16px;
     border: none;
     border-radius: 6px;
     font-family: var(--font-primary);
@@ -90,12 +90,148 @@ p {
     transition: background-color 0.3s ease;
 }
 
+/* Bouton secondaire */
+.btn-secondary {
+    background-color: white;
+    color: var(--secondary);
+    border: 1px solid var(--primary);
+    padding: 8px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 600;
+    box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.05);
+}
+
 /* Effet au survol */
 .btn-primary:hover {
     background-color: #388E3C;
     box-shadow: 0 4px 8px rgba(#333333, 0.2);
 }
 
+.btn-secondary:hover {
+    box-shadow: 2px 2px 6px rgba(27, 66, 51, 0.2);
+}
+
+/* SECTION NAVBAR - BARRE DE NAVIGATION (DESKTOP) */
+
+/* Structure générale de la barre */ 
+.navbar {
+    background-color: var(--secondary);
+    padding: 1rem 0;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+/* Conteneur interne avec logo et liens */ 
+.container-nav {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Logo EcoRide */ 
+.logo img {
+    height: 40px;
+}
+
+/* Liens de navigation */ 
+.nav-links {
+    display: flex;
+    justify-content: space-between;
+    flex-grow: 1;
+    margin-left: 8rem;
+}
+
+.nav-left,
+.nav-right {
+    display: flex;
+    gap: 1.5rem;
+    align-items: center;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.nav-links a {
+    text-decoration: none; 
+    font-family: var(--font-secondary);
+    font-weight: 500;
+    color: var(--text-light);
+    transition: color 0.3 ease;
+}
+
+/* Effet hover sur les liens */ 
+.nav-links a:hover {
+    color: var(--primary);
+}
+
+/* Menu déroulant mobile */
+.mobile-menu {
+  position: absolute;
+  top: 100%; /* Juste en dessous de la navbar */
+  left: 0;
+  width: 100%;
+  background-color: var(--background);
+  display: none;
+  flex-direction: column;
+  padding: 1.5rem 2rem;
+  z-index: 999;
+  border-top: 1px solid var(--primary);
+  animation: slideDown 0.3s ease forwards;
+}
+
+/* Animation douce d'ouverture */ 
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Quand le menu est actif */
+.mobile-menu.active {
+  display: flex;
+}
+
+/*Organisation des liens */ 
+
+.mobile-menu ul {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 1rem 0;
+  display: flex;
+  flex-direction: column; /*liens en colonne */
+  gap: 0.8rem; /* Espacement vertical entre les liens */ 
+  align-items: flex-start; 
+}
+
+.mobile-menu a {
+  color: var(--secondary);
+  text-decoration: none;
+  font-size: 1rem;
+  font-weight: 500;
+  font-family: var(--font-secondary);
+  transition: color 0.3s ease;
+}
+
+.mobile-menu a:hover {
+  color: var(--primary);
+}
+
+/* Barre de séparation entre les deux sections */ 
+.mobile-menu hr {
+    width: 80%;
+    border: 1px solid var(--primary);
+    margin: 1rem 0;
+}
 
 /* SECTION 1 : Présentation du covoiturage */
 
@@ -103,10 +239,12 @@ p {
     padding: 80px 0;
     background-color: var(--background);
     min-height: 600px;
+    margin-top: 2.4vh;
 }
 
 .presentation-covoiturage .container {
     display: flex;
+    flex-direction: row-reverse;
     align-items: center;
     justify-content: space-between;
     max-width: 1200px;
@@ -153,22 +291,6 @@ p {
     display: flex;
     align-items: center;
     justify-content: space-between;
-}
-
-/* Bouton secondaire - Blanc bordure verte */ 
-.btn-secondary {
-    background-color: white;
-    color: var(--secondary);
-    border: 1px solid var(--primary);
-    padding: 8px 16px;
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 0.9rem;
-    box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.05);
-}
-
-.btn-secondary:hover {
-    box-shadow: 2px 2px 6px rgba(27, 66, 51, 0.2);
 }
 
 /*SECTION 2 : Barre de recherche */
@@ -239,6 +361,7 @@ p {
     padding: 80px 0;
     background-color: var(--background);
     min-height: 600px;
+    margin-bottom: 2.4vh;
 }
 
 .presentation-entreprise .container {
@@ -312,4 +435,167 @@ p {
     color: white;
     text-decoration: underline;
     margin-right: 5px;
+}
+
+/* ------- RESPONSIVE DESIGN ------- */ 
+/* Mobile (max-width: 768px) */
+@media screen and (max-width: 768px) {
+
+/* Affichage burger seulement sur mobile */
+    .nav-links {
+        display: none;
+    }
+
+/* NAVIGATION MOBILE DROPDOWN */
+
+    .burger {
+        position: absolute;
+        left: 1.2rem;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 24px;
+        height: 24px;
+        cursor: pointer;
+        z-index: 1100;
+        display: block;
+    }
+
+/* Barre du burger */ 
+    .burger span {
+        position: absolute;
+        left: 0;
+        width: 100%;
+        height: 3px;
+        background-color: var(--secondary);
+        border-radius: 2px;
+        transition: all 0.35s ease;
+    }
+
+/* Etat normal */
+    .burger span:nth-child(1) {
+        top: 2px;
+    }
+
+    .burger span:nth-child(2) {
+        top: 50%;
+        transform: translateY(-50%);
+    }
+
+    .burger span:nth-child(3) {
+        bottom: 2px;
+    }
+
+/* Etat actif */
+    .burger.active span:nth-child(1) {
+        top: 50%;
+        transform: translateY(-50%) rotate(45deg);
+    }
+
+    .burger.active span:nth-child(2) {
+        opacity: 0;
+    }
+
+    .burger.active span:nth-child(3) {
+        bottom: auto;
+        top: 50%;
+        transform: translateY(-50%) rotate(-45deg);
+    }
+
+/* Affichage seulement sur mobile */
+    .navbar {
+        background-color: var(--background);
+        padding: 0.6rem 0;
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+    }
+
+    .container-nav {
+        justify-content: center;
+        align-items: center;
+        position: relative;
+        height: 56px;
+    }
+
+    .logo {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+    }
+
+    .logo img {
+        height: 32px;
+        align-items: center;
+    }
+
+    .presentation-covoiturage .container {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+
+    }
+
+    .presentation-covoiturage {
+        margin-top: 2.4vh;
+    }
+
+    .presentation-entreprise .container {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    .presentation-entreprise {
+        margin-bottom: 2.4vh;
+    }
+
+    .container {
+        padding-top: 24px;
+        padding-bottom: 24px;
+    }
+
+    .presentation-covoiturage .text-column,
+    .presentation-covoiturage .image-column {
+        width: 100%;
+    }
+
+    .titre-principal {
+        font-size: 0.875rem;
+        text-align: center;
+    }
+
+    .sous-titre {
+        font-size: 0.6rem;
+        text-align: center;
+        padding: 0 1rem;
+    }
+
+    .cta-buttons {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+    }
+    
+    .search-bar {
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .search-bar input[type="text"],
+    .search-bar input[type="date"],
+    .search-bar button {
+        width: 100%;
+    }
+
+    .search-field {
+        width: 100%;
+    }
+
+    .footer .footer-links {
+        flex-direction: column;
+        align-items: center;
+        gap: 0.5rem;
+    }
 }
