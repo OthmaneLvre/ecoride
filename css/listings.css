@@ -1,0 +1,228 @@
+/* EcoRide - FEUILLE DE STYLE CSS - Page listings.html */
+
+body.listings-page {
+  overflow-x: hidden;
+}
+
+body.listings-page main {
+  width: 100%;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+h1 {
+    text-align: center;
+    margin-top: 35px;
+    margin-bottom: 45px;
+    color: var(--secondary);
+}
+
+
+/*    CARTE DE CONDUCTEUR    */
+.results-section {
+    padding: 60px 0;
+}
+
+/* Conteneur de toutes les cartes */ 
+.results-container {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 40px;
+    flex-wrap: wrap;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.ride-card {
+    flex: 1 1 300px; /* Largeur minimum de 300px */ 
+    max-width: 340px; /* Limite la taille en desktop */ 
+    background-color: var(--card-background); 
+    border-radius: 12px;
+    padding: 20px;
+    margin: 0 auto;
+    box-shadow: 0px 4px 8px rgba(0,0,0,0.1);
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.ride-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0px 6px 12px rgba(0,0,0,0.15);
+}
+
+/* PHOTO CONDUCTEUR */
+.driver-photo {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 10px;
+}
+
+/* NOM CONDUCTEUR */
+.driver-name {
+    font-size: 1rem;
+    font-weight: 600;
+    font-family: var(--font-primary);
+    color: var(--text-dark);
+    margin-bottom: 4px;
+}
+
+/* ÉTOILES */
+.driver-rating {
+    display: flex;
+    justify-content: center;
+    gap: 3px;
+    margin-bottom: 10px;
+}
+
+.star-icon {
+    width: 18px;
+    height: 18px;
+    object-fit: contain;
+}
+
+/* DÉTAILS DU TRAJET */
+.ride-details {
+    margin-top: 10px;
+    font-size: 0.9rem;
+    color: var(--secondary);
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    width: 90%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.details-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* 2colonne égales */ 
+    align-items: center;
+    justify-content: space-between;
+    text-align: left;
+    }
+
+.details-row p {
+    margin: 0;
+    font-family: var(--font-secondary);
+}
+
+.details-row p:first-child {
+    font-weight: 500;
+    color: var(--text-dark);
+}
+
+.details-row p:last-child {
+    text-align: right;
+}
+
+.details-row img.eco-icon {
+    justify-self: end;
+}
+
+/* Icône écologique */
+.eco-icon {
+    width: 18px;
+    height: 18px;
+}
+
+/* BOUTON DÉTAIL */
+.btn-detail {
+    margin-top: 12px;
+    background-color: var(--primary);
+    color: var(--text-light);
+    border: none;
+    padding: 8px 18px;
+    border-radius: 8px;
+    font-family: var(--font-secondary);
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.btn-detail:hover {
+    background-color: #3B8C3A;
+    transform: scale(1.03);
+}
+
+/* Pas de résultat à la recherche */ 
+.no-results {
+  text-align: center;
+  padding: 60px 20px;
+  color: var(--secondary);
+}
+
+.no-results .empty-icon {
+  width: 60px;
+  margin-bottom: 20px;
+}
+
+.no-results h3 {
+  font-size: 1.2rem;
+  margin-bottom: 10px;
+}
+
+.no-results p {
+  font-size: 0.95rem;
+  margin-bottom: 20px;
+}
+
+
+/* --- Message d'accueil EcoRide --- */
+.welcome-message {
+  text-align: center;
+  padding: 4rem 1rem;
+  background-color: #f6faf7;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  color: #2c3e50;
+  animation: fadeIn 0.6s ease;
+}
+
+.welcome-message h2 {
+  color: #166534; /* vert EcoRide */
+  font-size: 1.8rem;
+  margin-bottom: 0.5rem;
+}
+
+.welcome-message p {
+  font-size: 1rem;
+  color: #444;
+  margin: 0.5rem 0;
+}
+
+.welcome-message .welcome-sub {
+  font-size: 0.95rem;
+  color: #666;
+}
+
+.welcome-image {
+  width: 220px;
+  height: auto;
+  border-radius: 12px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+  object-fit: cover;
+  margin-bottom: 1rem;
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
+}
+
+.welcome-image:hover {
+    transform: scale(1.03);
+    box-shadow: 0 8px 22px rgba(0, 0, 0, 0.2);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

@@ -1,0 +1,54 @@
+/* ------- RESPONSIVE DESIGN - Page index.html ------- */ 
+/* Mobile (max-width: 768px) */
+
+@media screen and (max-width: 768px) {
+
+    .presentation-covoiturage .container {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+
+    }
+
+    .presentation-covoiturage {
+        margin-top: 2.4vh;
+    }
+
+    .presentation-entreprise .container {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    .presentation-entreprise {
+        margin-bottom: 2.4vh;
+    }
+
+    .container {
+        padding-top: 24px;
+        padding-bottom: 24px;
+    }
+
+    .presentation-covoiturage .text-column,
+    .presentation-covoiturage .image-column {
+        width: 100%;
+    }
+
+    .titre-principal {
+        font-size: 0.875rem;
+        text-align: center;
+    }
+
+    .sous-titre {
+        font-size: 0.6rem;
+        text-align: center;
+        padding: 0 1rem;
+    }
+
+    .cta-buttons {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+    }
+}    
