@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="EcoRide - Plateforme de covoiturage écologique en France">
+    <title>Plateforme EcoRide</title>
+
+    <!-- Favicon -->
+    <link rel="icon" href="assets/icons/favicon.png" type="image/png">
+     
+    <!-- Google Fonts : Poppins (Titres)-->
+    <link href="https://font.googleapis.com/css2?family-Poppins:wght@500;700display=swap" rel="stylesheet">  
+
+    <!-- Feuille de style principale -->
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <!-- Contenu du site -->
+
+     <!-- SECTION navbar (DESKTOP) -->
+     <header class="navbar">
+        <div class="container-nav">
+
+              <!-- Icône du menu burger (mobile) -->
+               <div class="burger">
+                <span></span>
+                <span></span>
+                <span></span>
+               </div>
+
+            <!-- Logo icône seul pour Ecoride -->
+             <a href="index.html" class="logo">
+                <img src="assets/logo-footer.png" alt="EcoRide logo">
+             </a>
+
+             <!-- Menu de navigation -->
+              <nav class="nav-links">
+                <!-- Liens à gauche -->
+                <ul class="nav-left">
+                    <li><a href="index.html">Accueil</a></li>
+                    <li><a href="listings.html">Covoiturage</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                </ul>    
+
+                <!-- Liens à droite -->
+                <ul class="nav-right">
+                    <li><a href="login.html">Connexion</a></li>
+                    <li><a href="register.html">Inscription</a></li>  
+                </ul>
+              </nav>
+
+               <!-- Menu mobile overlay -->
+                <div class="mobile-menu" id="mobileMenu">
+                    <ul class="nav-left">
+                        <li><a href="index.html">Accueil</a></li>
+                        <li><a href="listings.html">Covoiturage</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                    </ul>
+                    <hr>
+                    <ul class="nav-right">
+                        <li><a href="login.html">Connexion</a></li>
+                        <li><a href="register.html">Inscription</a></li>
+                    </ul>
+                </div>
+        </div>
+     </header> 
+       
+     <!-- SECTION 1 : Présentation du covoiturage --> 
+        <section class="presentation-covoiturage">
+            <div class="container">
+
+                <div class="image-column">
+                    <img src="assets/images/illustration-covoiturage.jpg" alt="Illustration d'un covoiturage"/>
+                </div>  
+
+                <div class="text-column">
+                    <h1 class="titre-principal">Le covoiturage écoresponsable, simple et local.</h1>
+                    <p class="sous-titre">
+                        Trouvez ou proposez un trajet en quelques clics. Ensemble, réduisons notre impact carbone et partageons nos routes
+                    </p>
+                    <div class="cta-buttons">
+                        <!-- Bouton -->
+                        <button type="submit" class="btn-secondary">Proposer un trajet</button>
+                        <button type="submit" class="btn-primary">Réserver un trajet</button>
+                    </div>    
+                </div>
+
+  
+            </div>
+        </section>
+     <!-- SECTION 2 : Barre de recherche -->
+       <!-- Formulaire de recherche -->
+        <section class="search-section">
+            <div class="search-bar">
+
+                    <!-- Champ départ -->
+                     <div class="search-field">
+                        <img src="assets/icons/hugeicons_pin-location-02.png" alt="Départ" class="icon">
+                        <input type="text" placeholder="Ville de départ" required>
+                     </div>
+
+                     <!-- Champ arrivée -->
+                      <div class="search-field">
+                        <img src="assets/icons/streamline_travel-map-triangle-flag-navigation-map-maps-flag-gps-location-destination-goal.png" alt="Départ" class="icon">
+                        <input type="text" placeholder="Ville d'arrivée" required>
+                      </div>
+
+                      <!-- Champ date -->
+                       <div class="search-field">
+                        <img src="assets/icons/streamline-emojis_calendar.png" alt="Départ" class="icon">
+                        <input type="date" placeholder="JJ/MM/AAAA" required>
+                       </div>
+
+                       <!-- Bouton -->
+                        <button type="submit" class="search-button">Rechercher un trajet</button>
+            </div>
+        </section>
+
+     <!-- SECTION 3 : Présentation entreprise --> 
+           <section class="presentation-entreprise">
+            <div class="container">
+
+                <div class="image-column-entreprise">
+                    <img src="assets/images/illustration-presentation.jpg" alt="Illustration de personnes heureuse"/>
+                </div>   
+
+                <div class="text-column">
+                    <h1 class="titre-principal">Qui sommes-nous ?</h1>
+                    <p class="sous-titre">
+                        EcoRide est une plateforme de covoiturage écoresponsable dédiée aux trajets du quotidien. Nous mettons en relation conducteurs et passagers souhaitant partager leurs trajets locaux, afin de réduire les émissions de CO₂ et favoriser une mobilité plus durable. Ensemble, agissons pour un avenir plus vert et plus solidaire, un trajet à la fois.
+                    </p>
+                </div> 
+            </div>
+           </section>
+
+    <!-- FOOTER -->        
+            <footer class="footer">
+                <div class="footer-logo">
+                    <img src="assets/logo-footer.png" alt="EcoRide Logo"/>
+                </div>
+                <ul class="footer-links">
+                    <li><a href="#">Accueil</a></li>
+                    <li><a href="#">Covoiturage</a></li>
+                    <li><a href="#">Contact</a></li>
+                </ul>
+                <div class="footer-contact">
+                    <p><img src="assets/mail.png" alt="email icon" class="icon-mail" /> contact@ecoride.com</p>
+                </div>
+                <div class="footer-bottom">
+                    <a href="docs/mentions-legales.pdf" target="_blank">Mentions légales</a> |
+                    <span>© EcoRide 2025 - Tous droits réservés</span>
+                </div>
+            </footer>
+
+<script src="js/main.js"></script>
+</body>
+</html>
