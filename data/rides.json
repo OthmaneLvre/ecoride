@@ -1,0 +1,54 @@
+[
+  {
+    "id": 1,
+    "driverName": "José",
+    "photo": "assets/images/driver1.jpg",
+    "rating": 4.8,
+    "price": "16,40 €",
+    "date": "25/10/2025",
+    "departure": "Perpignan - 09h45",
+    "arrival": "Lyon - 16h20",
+    "eco": false,
+    "seats": 3,
+    "city": "Perpignan"
+  },
+  {
+    "id": 2,
+    "driverName": "Laura",
+    "photo": "assets/images/driver2.jpg",
+    "rating": 5,
+    "price": "18,30 €",
+    "date": "25/10/2025",
+    "departure": "Céret - 10h30",
+    "arrival": "Montpellier - 13h00",
+    "eco": true,
+    "seats": 2,
+    "city": "Céret"
+  },
+  {
+    "id": 3,
+    "driverName": "Léon",
+    "photo": "assets/images/driver3.jpg",
+    "rating": 4.5,
+    "price": "22,10 €",
+    "date": "25/10/2025",
+    "departure": "Banyuls-sur-mer - 07h30",
+    "arrival": "Toulouse - 11h45",
+    "eco": false,
+    "seats": 4,
+    "city": "Banyuls-sur-mer"
+  },
+   {
+    "id": 4,
+    "driverName": "Hubert",
+    "photo": "assets/images/driver2.jpg",
+    "rating": 4.5,
+    "price": "16,40 €",
+    "date": "27/10/2025",
+    "departure": "Perpignan - 08h30",
+    "arrival": "Lyon - 15h15",
+    "eco": true,
+    "seats": 0,
+    "city": "Perpignan"
+  }
+]
