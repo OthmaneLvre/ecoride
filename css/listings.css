@@ -19,6 +19,250 @@ h1 {
     color: var(--secondary);
 }
 
+/* SECTION FILTRES */
+.section-filter-bar { 
+  display: none; /* cachée par défaut*/ 
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.section-filter-bar.show {
+  display: block;
+  opacity: 1;
+  margin: 30px;
+}
+
+.filter-bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  background-color: var(--background);
+  flex-wrap: wrap;
+  padding: 18px 26px;
+  border-radius: 14px;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.3);
+  max-width: 1150px;
+  margin: 0 auto;
+
+}
+
+.filter-bar .icon-title {
+  width: 18px;
+  height: 18px;
+  transform: translateY(-3px);
+}
+
+.filter-bar h3 {
+  font-family: var(--font-secondary);
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-dark);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0 20px 0 0;
+  
+}
+
+/* Container des filtres */
+.filters-container {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 14px;
+  margin: 0;
+  flex-wrap: nowrap;
+}
+
+.filters-container input[type="number"] {
+  background-color: var(--card-background);
+  border: none;
+  border-radius: 6px;
+  width: 75px;
+  text-align: center;
+  padding: 5px 6px;
+}
+
+/* Champs de formulaire */
+.filters-container label.filter-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-secondary);
+  font-size: 0.75rem;
+  color: var(--text-dark);
+}
+
+.filters-container input,
+.filters-container select {
+  width: 100%;
+  padding: 10px 14px;
+  border: 1px solid var(--card-background);
+  border-radius: 10px;
+  background-color: var(--text-light);
+  transition: all 0.2s ease;
+}
+
+.filters-container input:focus,
+.filters-container select:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 5px rgba(50, 160, 90, 0.3);
+  background-color: var(--text-light);
+}
+
+/* Checkbox */
+.filters-container input[type="checkbox"] {
+  width: auto;
+  accent-color: var(--primary);
+  transform: scale(1.2);
+  margin-right: 6px;
+}
+
+/* Lignes d'alignement pour les labels checkbox */
+.filter-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--secondary);
+  font-size: 0.85rem;
+  color: var(--text-dark);
+  white-space: nowrap;
+}
+
+/* Icône */ 
+.filter-item .icon {
+  width: 16px;
+  height: 16px;
+  margin-right: 5px;
+}
+
+/* ------ SELECT PERSONNALISÉ POUR LES NOTES ------ */
+.custom-select {
+  position: relative;
+  width: 90px;
+  font-family: var(--font-secondary);
+  font-size: 0.75rem;
+  color: var(--text-dark);
+  cursor: pointer;
+  user-select: none;
+}
+
+.select-selected {
+  background-color: var(--card-background);
+  border: none;
+  border-radius: 6px;
+  padding: 6px 8px;
+  width: 85px;
+  text-align: center;
+  transition: 0.3s ease;
+}
+
+.select-selected:hover {
+  border-color: var(--primary);
+  box-shadow: 0 0 4px rgba(50, 160, 90, 0.3);
+}
+
+.arrow-icon {
+  width: 14px;
+  height: 14px;
+  opacity: 0.7;
+  transition: transform 0.3s ease;
+}
+
+.select-options {
+  position: absolute;
+  top: 105%;
+  left: 0;
+  right: 0;
+  background-color: var(--text-light);
+  border: 1px solid var(--card-background);
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  z-index: 100;
+  display: none;
+  flex-direction: column;
+  padding: 6px 0;
+}
+
+.select-options div {
+  padding: 8px 12px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  transition: 0.2s ease;
+}
+
+.select-options div:hover {
+  background-color: var(--background);
+}
+
+.star-icon {
+  width: 18px;
+  height: 18px;
+  object-fit: contain;
+}
+
+.custom-select.active .select-options {
+  display: flex;
+}
+
+.custom-select.active .arrow-icon {
+  transform: rotate(180deg);
+}
+
+/* Section Bouton */ 
+.filter-actions {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  animation: fadeInUp 0.5s ease;
+}
+
+.apply-filters-btn, 
+.reset-filter-btn {
+  min-width: 70px;
+  text-align: center;
+  font-family: var(--font-secondary);
+  font-weight: 500;
+  font-size: 0.9rem;
+  padding: 10px 20px;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+/* Bouton Appliquer */ 
+.apply-filters-btn {
+  background-color: var(--primary);
+  color: var(--text-light);
+  border: none;
+}
+
+.apply-filters-btn:hover {
+  background-color: var(--secondary);
+  transform: scale(1.03);
+}
+
+/*Bouton réinitialiser */ 
+.reset-filter-btn {
+  background-color: transparent;
+  color: var(--secondary);
+  border: 1px solid var(--secondary)
+}
+
+.reset-filter-btn:hover {
+  background-color: var(--secondary);
+  color: var(--text-light);
+  transform: scale(1.03);
+}
+
+
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
 
 /*    CARTE DE CONDUCTEUR    */
 .results-section {
@@ -78,12 +322,6 @@ h1 {
     justify-content: center;
     gap: 3px;
     margin-bottom: 10px;
-}
-
-.star-icon {
-    width: 18px;
-    height: 18px;
-    object-fit: contain;
 }
 
 /* DÉTAILS DU TRAJET */
@@ -225,4 +463,11 @@ h1 {
     opacity: 1;
     transform: translateY(0);
   }
+}
+
+
+/* Champs de recherche fixés */ 
+.search-field input[readonly] {
+  color: var(--primary);
+  cursor: default;
 }

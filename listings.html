@@ -54,14 +54,93 @@
                         <button type="submit" class="search-button">Rechercher un trajet</button>
             </form>
         </section>
+                <!-- SECTION 2 - FILTRES -->
+         <section class="section-filter-bar">
+            <div class="filter-bar">
+                <img src="assets/icons/filter.png" alt="Filtre" class="icon-title">
+                <h3>Affiner ma recherche</h3>
+                <div class="filters-container">
 
-        <!-- Résultats de recherche - carte -->
+                <!-- Filtre écologique -->
+                 <label class="filter-item">
+                    <img src="assets/icons/ecologic.png" alt="électrique" class="icon">
+                    Voiture électrique
+                    <input type="checkbox" id="filter-eco">
+                 </label>
+
+                <!-- Filtre prix -->
+                 <label class="filter-item" for="filter-price">
+                    <img src="assets/icons/euro.png" alt="Prix" class="icon">    
+                    Prix maximum (€)
+                </label>
+                    <input type="number" id="filter-price" min="0" placeholder="Ex: 20">
+ 
+                <!-- Filtre durée -->
+                 <label class="filter-item" for="filter-duration">
+                    <img src="assets/icons/clock.png" alt="durée" class="icon">
+                    Durée maximum (heures)
+                </label>
+                    <input type="number" id="filter-duration" min="0" placeholder="Ex: 2">  
+                    
+                <!-- Filtre note -->    
+                 <label class="filter-item" for="filter-rating">
+                    <img src="assets/icons/star-full.png" alt="Note" class="icon">
+                    Note minimum
+                </label>
+                <div class="custom-select" id="filter-rating">
+                <div class="select-selected">
+                    <span>Toutes</span>
+                    <img src="assets/icons/chevron-down.png" alt="Ouvrir" class="arrow-icon">
+                </div>
+                <div class="select-options">
+                    <div data-value="1">
+                    <img src="assets/icons/star-full.png" alt="Star" class="star-icon">
+                    &nbsp;et plus
+                    </div>
+                    <div data-value="2">
+                    <img src="assets/icons/star-full.png" alt="Star" class="star-icon">
+                    <img src="assets/icons/star-full.png" alt="Star" class="star-icon">
+                    &nbsp;et plus
+                    </div>
+                    <div data-value="3">
+                    <img src="assets/icons/star-full.png" alt ="Star" class="star-icon">
+                    <img src="assets/icons/star-full.png" alt ="Star" class="star-icon">
+                    <img src="assets/icons/star-full.png" alt ="Star" class="star-icon">
+                    &nbsp;et plus
+                    </div>
+                    <div data-value="4">
+                    <img src="assets/icons/star-full.png" alt ="Star" class="star-icon">
+                    <img src="assets/icons/star-full.png" alt ="Star" class="star-icon">
+                    <img src="assets/icons/star-full.png" alt ="Star" class="star-icon">
+                    <img src="assets/icons/star-full.png" alt ="Star" class="star-icon">
+                    &nbsp;et plus
+                    </div>
+                    <div data-value="5">
+                    <img src="assets/icons/star-full.png" alt ="Star" class="star-icon">
+                    <img src="assets/icons/star-full.png" alt ="Star" class="star-icon">
+                    <img src="assets/icons/star-full.png" alt ="Star" class="star-icon">
+                    <img src="assets/icons/star-full.png" alt ="Star" class="star-icon">
+                    <img src="assets/icons/star-full.png" alt ="Star" class="star-icon">
+                    &nbsp;uniquement
+                    </div>
+  </div>
+</div>
+                
+                    <div class="filter-actions">
+                        <button id="apply-filters" class="apply-filters-btn">Appliquer</button>
+                        <button id="reset-filters" class="reset-filter-btn">Réinitialiser</button>
+                </div>    
+                </div>
+         </section>
+
+        <!-- SECTION 3 - Résultats de recherche - carte -->
         <section class="results-section">
             <h2>Résultats de votre recherche</h2>
             <div class="results-container">
                 <!-- Les cartes sont injectées ici par JS -->  
             </div>     
         </section>
+
 
      </main>
     
