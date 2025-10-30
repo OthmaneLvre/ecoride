@@ -1,0 +1,372 @@
+/* EcoRide - FEUILLE DE STYLE CSS - Page details.html */
+
+/* ======= STRUCTURE GÉNÉRALE ======= */
+body.details-page {
+  background-color: #FFFFFF;
+  font-family: var(--font-primary);
+  overflow-x: hidden;
+}
+
+.page-title {
+  text-align: center;
+  font-family: var(--font-secondary);
+  font-size: 2rem;
+  margin-bottom: 2rem;
+  margin-top: 24px;
+  color: var(--secondary);
+}
+
+/* SECTION BLOC TRAJET + PREFERENCES */ 
+.details-container {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 4rem;
+    margin: 3rem auto;
+    max-width: 1100px;
+    position: relative;
+}
+
+#preferences.card {
+    align-self: center;
+}
+
+/* Trajet */
+#ride-info {
+    flex: 1.6;
+}
+
+#ride-info.card {
+  width: 520px;
+  max-width: 100%;
+}
+
+/* Préférences */
+
+#preferences {
+    flex: 1.3;
+}
+
+#preferences.card {
+  width: 340px;
+  max-width: 100%;
+}
+
+/* Avis conducteur */
+.review-card {
+  margin-bottom: 0.8rem;
+}
+
+/* Style des cartes */ 
+.card {
+  background: var(--card-background);
+  border-radius: 12px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+  padding: 1.8rem;
+  flex: 1;
+  transition: transform 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-3px);
+}
+
+/* ======= INFOS TRAJET ======= */
+#ride-info h2,
+#preferences h3,
+#reviews h2 {
+  font-family: var(--font-secondary);
+  font-size: 1.4rem;
+  margin-bottom: 1rem;
+  color: var(--secondary);
+  text-align: center;
+}
+
+.driver-info {
+  display: flex;
+  align-items: center;
+  gap: 15rem;
+  margin-bottom: 0.8rem;
+}
+
+.driver-photo {
+  width: 65px;
+  height: 65px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--primary);
+}
+
+.driver-name {
+  font-family: var(--font-secondary);
+  font-size: 1rem;
+  text-align: center;
+  color: var(--secondary);
+  margin-bottom: 0;
+}
+
+.driver-rating {
+  display: flex;
+  gap: 4px;
+}
+
+.star-icon {
+  width: 16px;
+  height: 16px;
+}
+
+/* ======= DÉTAILS TRAJET ======= */
+.ride-details {
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  padding-top: 1rem;
+}
+
+/* Bloc départ / arrivée */
+.details-row.two-cols {
+  display: flex;
+  justify-content: space-between;
+  text-align: center;
+  gap: 2rem;
+  margin-bottom: 1rem;
+}
+
+.details-row.two-cols p {
+    margin: 0.2rem 0;
+}
+
+/*Bloc durée / distance */
+.details-row {
+  display: flex;
+  align-items: center;
+  margin: 0.4rem 0;
+}
+
+/* Bloc véhicule */
+
+.vehicle-info {
+  display: flex;
+  flex-direction: column;      /*  empile le contenu */
+  align-items: center;         /* centre tout horizontalement */
+  text-align: center;
+  padding: 1rem 1.2rem;
+  margin: 1rem auto;
+  width: 100%;
+  max-width: 360px;            /* ✅ limite la largeur pour garder un bon équilibre */
+}
+
+/* Titre "Véhicule" + icône */
+.vehicle-title {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  margin-bottom: 0.6rem;
+}
+
+.vehicle-title h4 {
+  font-family: var(--font-secondary);
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--secondary);
+  margin: 0;
+}
+
+.vehicle-icon {
+  width: 18px;
+  height: auto;
+}
+
+/* Prix + places */
+.price-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 1rem;
+}
+
+/* Mention écologique */
+.eco-section {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 0.8rem;
+}
+
+.eco-icon {
+  width: 24px;
+  height: 24px;
+}
+
+/* Centrage des blocs spécifiques */
+.center-row {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  margin-top: 1rem;
+}
+
+
+/* Texte interne */
+.center-row p {
+  margin: 0;
+  font-size: 0.95rem;
+  color: var(--text-dark);
+}
+
+/* ======= PRÉFÉRENCES ======= */
+.driver-preferences {
+  border-radius: 10px;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.driver-preferences h2 {
+  color: var(--secondary);
+  font-family: 'Poppins', sans-serif;
+  font-size: 1.2rem;
+  margin-bottom: 15px;
+}
+
+.driver-preferences ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.driver-preferences li {
+  display: flex;
+  align-items: center;
+  margin-bottom: 12px;
+  gap: 10px;
+}
+
+.driver-preferences li img {
+  width: 24px;
+  height: 24px;
+  margin-right: 10px;
+}
+
+.driver-preferences li span {
+  font-family: 'Segoe UI', sans-serif;
+  color: var(--text-dark);
+  font-size: 1rem;
+}
+
+/* ======= AVIS CONDUCTEUR ======= */
+.reviews {
+  background-color: #E5E4D7;
+  border-radius: 14px;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
+  padding: 2.5rem 3rem;
+  margin: 3rem auto;
+  max-width: 1100px;
+  width: 100%;
+}
+
+.reviews h2 {
+  text-align: center;
+  font-family: var(--font-secondary);
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: var(--secondary);
+  margin-bottom: 2rem;
+}
+
+/* Conteneur de tous les avis */
+.reviews-list {
+  display: grid;
+  grid-template-columns: 20% 20% 1fr; /* pseudo | étoiles | commentaire */
+  align-items: center;
+  text-align: left;
+  row-gap: 1rem;
+  column-gap: 2rem;
+  position: relative;
+  padding: 1.5rem 2rem;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Traits verticaux */
+.reviews-list::before,
+.reviews-list::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background-color: var(--text-dark);
+}
+
+.reviews-list::before {
+  left: 20%;
+}
+
+.reviews-list::after {
+  left: 40%;
+}
+
+/* Chaque avis = 3 cellules consécutives */
+.review-card {
+  display: contents; /* les éléments internes s’insèrent directement dans la grille */
+}
+
+.review-card .pseudo {
+  font-weight: 600;
+  font-family: var(--font-secondary);
+  color: var(--secondary);
+}
+
+.review-card .stars {
+  display: flex;
+  justify-content: flex-start;
+  gap: 3px;
+}
+
+.review-card .stars img {
+  width: 18px;
+  height: 18px;
+}
+
+.review-card .comment {
+  font-size: 0.95rem;
+  color: var(--text-dark);
+}
+
+/* --- BOUTON PARTICIPER --- */
+.cta-buttons {
+  text-align: center;
+  margin-top: 2rem;
+  margin-bottom: 10px;
+}
+
+.btn-primary {
+  padding: 0.9rem 2.5rem;
+  font-family: var(--font-secondary);
+  font-size: 1.1rem;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+  transform: scale(1.05);
+}
+
+/* --- BOUTON RETOUR --- */
+
+.cta-buttons {
+  text-align: center;
+  margin-top: 0.5rem;
+  margin-bottom: 10px;
+}
+
+.btn-secondary {
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-secondary:hover {
+  transform: scale(1.05);
+}

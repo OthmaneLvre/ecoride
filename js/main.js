@@ -63,10 +63,7 @@ function initBurgerMenu() {
 document.addEventListener("DOMContentLoaded", () => {
   const form = document.querySelector(".search-bar");
 
-  if (!form) {
-    console.warn("Formulaire de recherche introuvable sur cette page.");
-    return;
-  }
+  if (!form) return;
 
   form.addEventListener("submit", (e) => {
     e.preventDefault();
@@ -78,7 +75,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (from && to && date) {
       const url = `listings.html?from=${encodeURIComponent(from)}&to=${encodeURIComponent(to)}&date=${encodeURIComponent(date)}`;
       console.log("Redirection vers :", url);
-      window.location.href = url;
+      globalThis.location.href = url;
     } else {
       alert("Merci de remplir tous les champs avant de lancer la recherche !");
     }
@@ -110,7 +107,7 @@ if (searchForm) {
 
     // Redirection après légère attente
     setTimeout(() => {
-      window.location.href = `listings.html?from=${encodeURIComponent(departure)}&to=${encodeURIComponent(arrival)}&date=${encodeURIComponent(date)}`;
+      globalThis.location.href = `listings.html?from=${encodeURIComponent(departure)}&to=${encodeURIComponent(arrival)}&date=${encodeURIComponent(date)}`;
     }, 400); // même durée que la transition CSS
   });
 }

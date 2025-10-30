@@ -254,6 +254,19 @@ function renderRides(rides, container) {
       <button class="btn-detail">Détail</button>
     `;
 
+    // --- Redirection vers la page détail ---
+const detailBtn = card.querySelector(".btn-detail");
+if (detailBtn) { 
+  detailBtn.addEventListener("click", () => {
+
+    // Sauvegarde de l'URL actuelle de la page listings 
+    localStorage.setItem("lastSearchURL", window.location.href);
+
+    // Redirection vers page details du trajet cliqué 
+    window.location.href = `details.html?id=${ride.id}`;
+  });
+}
+
     container.appendChild(card);
   };
 }
@@ -265,10 +278,8 @@ function renderRides(rides, container) {
 const ecoFilter = document.getElementById('filter-eco');
 const priceFilter = document.getElementById('filter-price');
 const durationFilter = document.getElementById('filter-duration');
-const ratingFilter = document.getElementById('filter-rating');
 const applyFiltersBtn = document.getElementById('apply-filters');
 const resetFilterBtn = document.getElementById('reset-filters');
-
 
 
 // --- Fonction d'affichage des trajets filtres ---
@@ -314,6 +325,15 @@ for (const trajet of trajetsArray) {
     <button class="btn-detail">Détail</button>
   `;
 
+  // --- Bouton detail actif après filtrage --- 
+  const detailBtn = card.querySelector(".btn-detail");
+  if (detailBtn) {
+    detailBtn.addEventListener("click", () => {
+      localStorage.setItem("lastSearchURL", window.location.href);
+      window.location.href = `details.html?id=${trajet.id}`;
+    });
+  }
+
   resultsContainer.appendChild(card);
 }
 }
@@ -350,8 +370,18 @@ if (applyFiltersBtn) {
   applyFiltersBtn.addEventListener("click", (e) => {
   e.preventDefault();
   filtrerTrajets();  
-  });
+
+  // -- Sauvergarde des filtres actifs 
+  const filtersState = {
+    eco: ecoFilter.checked,
+    price: priceFilter.value, 
+    duration: durationFilter.value, 
+    rating: document.querySelector("#filter-rating .select-selected span")?.dataset?.value || ""
+  };
+  localStorage.setItem("activeFilters", JSON.stringify(filtersState));
+});
 } 
+
 
 // --- Réinitialisation des filtres --- 
 if (resetFilterBtn) {
@@ -398,5 +428,25 @@ document.addEventListener("click", (e) => {
   if (!customSelect.contains(e.target)) {
     customSelect.classList.remove("active");
   }
+});
+
+// === Restauration des filtres après retour à la liste ===
+window.addEventListener("load", () => {
+  const savedFilters = JSON.parse(localStorage.getItem("activeFilters"));
+  if (!savedFilters) return;
+
+  // On restaure les valeurs dans les champs
+  ecoFilter.checked = savedFilters.eco || false;
+  priceFilter.value = savedFilters.price || "";
+  durationFilter.value = savedFilters.duration || "";
+
+  const ratingSpan = document.querySelector("#filter-rating .select-selected span");
+  if (ratingSpan && savedFilters.rating) {
+    ratingSpan.innerHTML = `${savedFilters.rating} ★`;
+    ratingSpan.dataset.value = savedFilters.rating;
+  }
+
+  // Appliquer les filtres 
+    filtrerTrajets();
 });
 });

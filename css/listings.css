@@ -269,6 +269,11 @@ h1 {
     padding: 60px 0;
 }
 
+.results-section h2 {
+  text-align: center;
+  padding-bottom: 24px;
+}
+
 /* Conteneur de toutes les cartes */ 
 .results-container {
     display: flex;

@@ -12,7 +12,15 @@
     "arrivalCity": "Lyon",
     "arrivalTime": "16:20",
     "eco": false,
-    "seats": 3
+    "seats": 3,
+    "energy": "Diesel",
+    "carBrand": "Volkswagen",
+    "carModel": "Golf IV",
+    "preferences": ["Fumeur", "N'accepte pas les animaux", "Aime la musique"],
+    "reviews": [
+      {"auteur": "Emilie", "note": 5, "commentaire": "Excellent trajet!"},
+      {"auteur": "Steve", "note": 4.5, "commentaire": "Conduite agréable."}
+    ] 
   },
   {
     "id": 2,
@@ -27,7 +35,15 @@
     "arrivalCity": "Montpellier",
     "arrivalTime": "13:00",
     "eco": true,
-    "seats": 2
+    "seats": 2,
+    "energy": "Diesel",
+    "carBrand": "Volkswagen",
+    "carModel": "Golf IV",
+    "preferences": ["Non fumeur", "Accepte les animaux", "Pas de musique"],
+    "reviews": [
+      {"auteur": "Laura", "note": 5, "commentaire": "Excellent trajet!"},
+      {"auteur": "Nicolas", "note": 4, "commentaire": "Conduite agréable."}
+    ] 
   },
   {
     "id": 3,
@@ -42,7 +58,15 @@
     "arrivalCity": "Toulouse",
     "arrivalTime": "11:45",
     "eco": false,
-    "seats": 4
+    "seats": 4,
+    "energy": "Diesel",
+    "carBrand": "Volkswagen",
+    "carModel": "Golf IV",
+    "preferences": ["Non fumeur", "Accepte les animaux", "Pause café possible"],
+    "reviews": [
+      {"auteur": "Laura", "note": 5, "commentaire": "Excellent trajet!"},
+      {"auteur": "Nicolas", "note": 4, "commentaire": "Conduite agréable."}
+    ] 
   },
    {
     "id": 4,
@@ -57,12 +81,20 @@
     "arrivalCity": "Lyon",
     "arrivalTime": "15:15",
     "eco": true,
-    "seats": 0
+    "seats": 0,
+    "energy": "Électrique",
+    "carBrand": "Renault",
+    "carModel": "Zoé",
+    "preferences": ["Non fumeur", "Accepte les animaux", "Pause café possible"],
+    "reviews": [
+      {"auteur": "Laura", "note": 5, "commentaire": "Excellent trajet!"},
+      {"auteur": "Nicolas", "note": 4, "commentaire": "Conduite agréable."}
+    ] 
   },
    {
     "id": 5,
     "driverName": "Alfred",
-    "photo": "assets/images/avatar/driver2.jpg",
+    "photo": "assets/images/avatar/driver3.jpg",
     "rating": 3.5,
     "price": "16,40 €",
     "departureDate": "25/10/2025",
@@ -72,22 +104,38 @@
     "arrivalCity": "Lyon",
     "arrivalTime": "15:15",
     "eco": true,
-    "seats": 0
+    "seats": 0,
+    "energy": "Électrique",
+    "carBrand": "Renault",
+    "carModel": "Zoé",
+    "preferences": ["Non fumeur", "Accepte les animaux", "Pause café possible"],
+    "reviews": [
+      {"auteur": "Laura", "note": 5, "commentaire": "Excellent trajet!"},
+      {"auteur": "Nicolas", "note": 4, "commentaire": "Conduite agréable."}
+    ] 
   },   
   {
     "id": 6,
     "driverName": "Julie",
     "photo": "assets/images/avatar/driver2.jpg",
-    "rating": 2.5,
-    "price": "16,40 €",
+    "rating": 4.3,
+    "departureCity": "Perpignan",
+    "arrivalCity": "Lyon",
     "departureDate": "25/10/2025",
     "arrivalDate": "25/10/2025",
-    "departureCity": "Perpignan",
     "departureTime": "08:30",
-    "arrivalCity": "Lyon",
     "arrivalTime": "15:15",
+    "price": "16,40 €",
+    "seats": 4,
     "eco": true,
-    "seats": 4
+    "energy": "Électrique",
+    "carBrand": "Renault",
+    "carModel": "Zoé",
+    "preferences": ["Fumeur", "Accepte les animaux", "Aime discuter"],
+    "reviews": [
+      {"auteur": "Laura", "note": 5, "commentaire": "Excellent trajet! Discussion agréable, je recommande Julie."},
+      {"auteur": "Nicolas", "note": 4, "commentaire": "Conduite agréable."}
+    ] 
   },   
   {
     "id": 7,
@@ -102,7 +150,15 @@
     "arrivalCity": "Lyon",
     "arrivalTime": "15:15",
     "eco": false,
-    "seats": 2
+    "seats": 2,
+    "energy": "Diesel",
+    "carBrand": "Citroën",
+    "carModel": "C3",
+    "preferences": ["Non fumeur", "Accepte les animaux", "Pause café possible"],
+    "reviews": [
+      {"auteur": "Laura", "note": 5, "commentaire": "Excellent trajet!"},
+      {"auteur": "Nicolas", "note": 4, "commentaire": "Conduite agréable."}
+    ] 
   },   
   {
     "id": 8,
@@ -117,7 +173,15 @@
     "arrivalCity": "Lyon",
     "arrivalTime": "15:15",
     "eco": true,
-    "seats": 1
+    "seats": 1,
+    "energy": "Électrique",
+    "carBrand": "Renault",
+    "carModel": "Zoé",
+    "preferences": ["Non fumeur", "Accepte les animaux", "Pause café possible"],
+    "reviews": [
+      {"auteur": "Laura", "note": 5, "commentaire": "Excellent trajet!"},
+      {"auteur": "Nicolas", "note": 4, "commentaire": "Conduite agréable."}
+    ] 
   },   
   {
     "id": 9,
@@ -132,7 +196,15 @@
     "arrivalCity": "Lyon",
     "arrivalTime": "15:15",
     "eco": false,
-    "seats": 1
+    "seats": 1,
+    "energy": "Essence",
+    "carBrand": "Renault",
+    "carModel": "Zoé",
+    "preferences": ["Non fumeur", "Accepte les animaux", "Pause café possible"],
+    "reviews": [
+      {"auteur": "Laura", "note": 5, "commentaire": "Excellent trajet!"},
+      {"auteur": "Nicolas", "note": 4, "commentaire": "Conduite agréable."}
+    ] 
   },   
   {
     "id": 10,
@@ -147,6 +219,14 @@
     "arrivalCity": "Lyon",
     "arrivalTime": "12:30",
     "eco": true,
-    "seats": 2
+    "seats": 2,
+    "energy": "Électrique",
+    "carBrand": "Renault",
+    "carModel": "Zoé",
+    "preferences": ["Non fumeur", "Accepte les animaux", "Pause café possible"],
+    "reviews": [
+      {"auteur": "Laura", "note": 5, "commentaire": "Excellent trajet!"},
+      {"auteur": "Nicolas", "note": 4, "commentaire": "Conduite agréable."}
+    ] 
   }
 ]

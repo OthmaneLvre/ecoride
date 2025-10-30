@@ -1,0 +1,187 @@
+/* --- EcoRide - RESPONSIVE PAGE DETAILS --- */
+
+@media screen and (max-width: 768px) {
+
+  /* ===== STRUCTURE GÉNÉRALE ===== */
+  body.details-page {
+    overflow-x: hidden;
+    padding: 0;
+    margin: 0;
+  }
+
+  .page-title {
+    font-size: 1.6rem;
+    margin: 1.5rem 0;
+  }
+
+  .details-container {
+    flex-direction: column;       /* cartes l’une sous l’autre */
+    align-items: center;
+    justify-content: center;
+    gap: 2rem;
+    margin: 2rem auto;
+    padding: 0 1rem;
+    max-width: 95%;
+  }
+
+  .card {
+    width: 100%;
+    max-width: 600px;
+    padding: 1.5rem;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
+  }
+
+
+
+  /* ===== INFOS CONDUCTEUR ===== */
+  .driver-info {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 1rem;
+  }
+
+  .driver-photo {
+    width: 80px;
+    height: 80px;
+  }
+
+  .driver-name {
+    font-size: 1.1rem;
+  }
+
+  .driver-rating img {
+    width: 18px;
+    height: 18px;
+  }
+
+  /* ===== DÉTAILS TRAJET ===== */
+  .ride-details {
+    width: 100%;
+    margin-top: 1rem;
+  }
+
+  .ride-details .details-row {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 0.5rem;
+  }
+
+  .ride-details p {
+    margin: 0;
+    text-align: center;
+  }
+
+  /* ===== VÉHICULE ===== */
+  .vehicle-info {
+    max-width: 100%;
+    margin: 1rem auto;
+    padding: 1rem;
+  }
+
+  .vehicle-title h4 {
+    font-size: 1.1rem;
+  }
+
+  /* --- PREFERENCES DU CONDUCTEUR --- */
+  .driver-preferences {
+    width: 100%;
+    max-width: 600px;
+    padding: 1.5rem;
+    border-radius: 10px;
+
+  }
+
+  .driver-preferences h2,
+  .driver-preferences h3 {
+    text-align: center;
+    font-size: 1.1rem;
+    margin-bottom: 1rem;
+  }
+
+ /* ==============================
+   AVIS DU CONDUCTEUR - VERSION UNIQUE
+   ============================== */
+
+.reviews {
+  background-color: #E6E4D9;
+  border-radius: 14px;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
+  padding: 1.5rem 1rem;
+  margin: 2rem auto;
+  width: 95%;
+  max-width: 700px;
+}
+
+.reviews h2 {
+  text-align: center;
+  font-family: var(--font-secondary);
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: var(--secondary);
+  margin-bottom: 1.2rem;
+}
+
+.reviews h2::after {
+  content: "";
+  display: block;
+  width: 60%;
+  height: 1px;
+  background-color: rgba(0, 0, 0, 0.2);
+  margin: 0.8rem auto 0;
+}
+
+/* Liste des avis */
+.reviews-list {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.2rem;
+  padding: 0;
+}
+
+/* Supprimer la grille et les traits du desktop */
+.reviews-list::before,
+.reviews-list::after {
+  display: none !important;
+}
+
+/* Chaque avis */
+.review-card {
+  background-color: #f6f6f2;
+  border-radius: 10px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  padding: 1rem 0.8rem;
+  width: 100%;
+  max-width: 600px;
+  text-align: center;
+}
+
+.review-card .pseudo {
+  font-weight: 600;
+  font-size: 1rem;
+  color: var(--secondary);
+  margin-bottom: 0.4rem;
+}
+
+.review-card .stars {
+  display: flex;
+  justify-content: center;
+  gap: 4px;
+  margin-bottom: 0.4rem;
+}
+
+.review-card .stars img {
+  width: 18px;
+  height: 18px;
+}
+
+.review-card .comment {
+  font-size: 0.95rem;
+  line-height: 1.4;
+  color: var(--text-dark);
+}
+}  
+
+
