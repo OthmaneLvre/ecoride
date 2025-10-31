@@ -73,6 +73,7 @@ document.addEventListener("DOMContentLoaded",() => {
             afficherDetailsTrajet(trajet);
             afficherPreferences(trajet.preferences);
             afficherAvis(trajet.reviews);
+            restaurerReservation(trajetID);
         })
         .catch((error) => {
             console.error("Error :", error);
@@ -252,13 +253,6 @@ function afficherAvis(reviews) {
   reviewsSection.appendChild(list);
 }
 
-// ---- BOUTON PARTICIPER ----
-document.addEventListener("click", (e) => {
-  if (e.target && e.target.id === "participer-btn") {
-    alert(" Fonctionnalité de réservation à venir !");
-  }
-});
-
 // --- BOUTON RETOUR A LA LISTE --- 
 document.addEventListener("DOMContentLoaded", () => {
   const backBtn = document.getElementById("back-to-list");
@@ -273,5 +267,100 @@ document.addEventListener("DOMContentLoaded", () => {
         window.location.href = "listings.html"; 
       }
     });
+  }
+});
+
+// --- RESTAURATION DE L'ÉTAT DE RÉSERVATION ---
+function restaurerReservation(trajetID) {
+  const saved = localStorage.getItem(`reservation_${trajetID}`);
+  if (!saved) return;
+
+  const { reserved, placesRestantes } = JSON.parse(saved);
+
+  if (reserved) {
+    const btn = document.getElementById("participate-btn");
+    const feedback = document.getElementById("feedback-msg");
+    const placeInfo = document.querySelector(".places-disponibles");
+
+    if (btn) {
+      btn.textContent = "Place réservée";
+      btn.disabled = true;
+    }
+
+    if (placeInfo) placeInfo.textContent = `Places disponibles : ${placesRestantes}`;
+
+    feedback.textContent = "✅ Vous participez déjà à ce covoiturage";
+    feedback.style.color = "var(--success)";
+  }
+}
+
+
+
+// Simulation de l'état utilisateur
+let userCredits = 2;          // crédits restants
+let placesDisponibles = 3;    // places sur le trajet
+const creditCost = 1;         // coût en crédit d'une participation
+
+// Sélecteurs
+const btn = document.getElementById("participate-btn");
+const feedback = document.getElementById("feedback-msg");
+
+if (typeof isLoggedIn === "undefined") {
+  window.isLoggedIn = false;
+}
+
+btn.addEventListener("click", () => {
+  if (!isLoggedIn) {
+    feedback.textContent = "Veuillez vous connecter ou créer un compte pour participer.";
+    feedback.style.color = "var(--error)";
+    return;
+  }
+
+  if (userCredits < creditCost) {
+    feedback.textContent = "Crédits insuffisants pour participer à ce covoiturage.";
+    feedback.style.color = "var(--error)";
+    return;
+  }
+
+  if (placesDisponibles <= 0) {
+    feedback.textContent = "Ce covoiturage est complet.";
+    feedback.style.color = "var(--error)";
+    return;
+  }
+
+  // Étape de double confirmation
+  const confirmation = confirm(
+    `Participer à ce covoiturage vous coûtera ${creditCost} crédit(s). Confirmer la réservation ?`
+  );
+
+  if (confirmation) {
+    const doubleConfirm = confirm("Souhaitez-vous définitivement valider votre participation ?");
+    if (doubleConfirm) {
+      userCredits -= creditCost;
+      placesDisponibles--;
+      feedback.textContent = "Participation confirmée ✅ Votre place est réservée.";
+      feedback.style.color = "var(--success)";
+      btn.textContent = "Place réservée";
+      btn.disabled = true;
+
+      // Sauvegarde locale de la réservation 
+      const urlParams = new URLSearchParams(window.location.search);
+      const trajetID = urlParams.get("id");
+
+      localStorage.setItem(`reservation_${trajetID}`, JSON.stringify({
+        reserved: true,
+        placesRestantes: placesDisponibles
+      }));
+
+      // Mise à jour visuelle (exemple)
+      const placeInfo = document.querySelector(".places-disponibles");
+      if (placeInfo) placeInfo.textContent = `Places disponibles : ${placesDisponibles}`;
+    } else {
+      feedback.textContent = "Participation annulée.";
+      feedback.style.color = "var(--error)";
+    }
+  } else {
+    feedback.textContent = "Réservation non confirmée.";
+    feedback.style.color = "var(--error)";
   }
 });

@@ -22,6 +22,9 @@ html {
     --card-background: #E5E4D7;
     --text-dark: #333333;
     --text-light: #FFFFFF;
+    --error: #E53935;
+    --sucess: #43A047;
+
 
     --font-primary: 'Segoe UI', sans-serif;
     --font-secondary: 'Poppins', sans-serif; 
@@ -182,6 +185,11 @@ main {
     color: var(--text-light);
     transition: color 0.3 ease;
 }
+
+.hidden {
+    display: none;
+}
+
 
 /* Effet hover sur les liens */ 
 .nav-links a:hover {

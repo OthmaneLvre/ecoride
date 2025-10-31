@@ -16,6 +16,9 @@ function loadHTML(id, file) {
       // Quand le header est chargé → on initialise le menu burger
       if (id === "header") {
         initBurgerMenu();
+
+        // Header bien injecté pour gérer la connexion 
+        initLoginSimulation();
       }
     })
     .catch((error) => console.error(error));
@@ -109,5 +112,103 @@ if (searchForm) {
     setTimeout(() => {
       globalThis.location.href = `listings.html?from=${encodeURIComponent(departure)}&to=${encodeURIComponent(arrival)}&date=${encodeURIComponent(date)}`;
     }, 400); // même durée que la transition CSS
+  });
+}
+
+// --- ÉTAT GLOBAL DE CONNEXION UTILISATEUR ---
+window.isLoggedIn = false; // false = visiteur, true = utilisateur
+
+// --- SYNCHRO NAV AVEC ETAT UTILISATEUR ---
+function updateNavLinks() {
+  const navSets = [
+    {
+      login: document.getElementById("link-login-desktop"),
+      register: document.getElementById("link-register-desktop"),
+      account: document.getElementById("link-account-desktop")
+    },
+    {
+      login: document.getElementById("link-login-mobile"),
+      register: document.getElementById("link-register-mobile"),
+      account: document.getElementById("link-account-mobile")
+    }
+  ];
+
+  // Boucle sur les deux versions de la nav (desktop + mobile )
+  navSets.forEach(set => {
+    if (!set.login || !set.register || !set.account) return;
+
+    if (isLoggedIn) {
+      set.login.classList.add("hidden");
+      set.register.classList.add("hidden");
+      set.account.classList.remove("hidden");
+    } else {
+      set.login.classList.remove("hidden");
+      set.register.classList.remove("hidden");
+      set.account.classList.add("hidden");
+    }
+  });
+}
+
+// --- FONCTION DE SIMULATION CONNEXION / DECONNEXION ---
+function initLoginSimulation() {
+  const loginLink = document.getElementById("link-login-desktop");
+  const logoutLink = document.getElementById("link-account-desktop");
+
+  if (!loginLink || !logoutLink) {
+    console.warn("Liens de connexion non trouvés, recheck dans 200ms...");
+    setTimeout(initLoginSimulation, 200);
+    return;
+  }
+
+  // --- Connexion simulée ---
+  loginLink.addEventListener("click", (e) => {
+    e.preventDefault(); // on empêche la redirection
+    window.isLoggedIn = true;
+    localStorage.setItem("isLoggedIn", "true");
+    updateNavLinks();
+    alert("✅ Connexion simulée avec succès !");
+  });
+
+  // --- Déconnexion simulée ---
+  logoutLink.addEventListener("click", (e) => {
+    e.preventDefault();
+    window.isLoggedIn = false;
+    localStorage.removeItem("isLoggedIn");
+    updateNavLinks();
+    alert("🚫 Déconnexion simulée !");
+  });
+
+  // --- Restauration automatique de l’état ---
+  const savedLogin = localStorage.getItem("isLoggedIn");
+  if (savedLogin === "true") {
+    window.isLoggedIn = true;
+    updateNavLinks();
+  }
+}
+
+
+// --- INITIALISATION ---
+// appel automatique quand la page est chargée
+document.addEventListener("DOMContentLoaded", updateNavLinks);
+
+// --- BOUTON DE SIMULATION DE CONNEXION --- 
+if (typeof toggleBtn !== "undefined" && toggleBtn) {
+  toggleBtn.addEventListener("click", () => {
+    // Inversion du bouton de connexion 
+    isLoggedIn = !isLoggedIn;
+
+    // Mise à jour visuelle de la nav 
+    updateNavLinks();
+
+    // Feedback utilisateur 
+    if (typeof feedback !== "undefined" && feedback) {
+      feedback.textContent = isLoggedIn
+        ? "✅ Vous êtes connecté (mode utilisateur)"
+        : "🚫 Vous êtes maintenant en mode visiteur";
+      feedback.style.color = isLoggedIn ? "var(--success)" : "var(--error)"; 
+    }
+
+    // Mise à jour du texte du bouton simulateur 
+    toggleBtn.textContent = isLoggedIn ? "Mode utilisateur" : "Mode visiteur";
   });
 }
