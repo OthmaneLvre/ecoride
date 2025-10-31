@@ -23,7 +23,7 @@ html {
     --text-dark: #333333;
     --text-light: #FFFFFF;
     --error: #E53935;
-    --sucess: #43A047;
+    --success: #43A047;
 
 
     --font-primary: 'Segoe UI', sans-serif;
@@ -47,7 +47,7 @@ body {
 
 h1,h2, h3 {
     font-family: var(--font-primary);
-    color: var(--text-dark);
+    color: var(--secondary);
 }
 
 h1 {

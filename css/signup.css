@@ -1,0 +1,110 @@
+/* EcoRide - FEUILLE DE STYLE CSS - Page signup.html */
+
+/* Struture générale */
+
+.signup-container {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(----text-light);
+    padding: 40px 20px;
+}
+
+/* Bloc du formulaire */ 
+
+.signup-form {
+    background-color: var(--background);
+    border-radius: 20px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    max-width: 420px;
+    width: 100%;
+    padding: 40px 30px;
+    text-align: center;
+}
+
+/* Titre principal */ 
+
+.signup-form h1 {
+    margin-bottom: 24px;
+}
+
+/* Groupes de champs */ 
+
+.form-group {
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+/* Labels */ 
+
+.form-group label {
+    display: block;
+    font-weight: 600;
+    color: var(--primary);
+    margin-bottom: 8px;
+    font-family: var(--font-secondary);
+}
+
+/* Inputs */ 
+
+.form-group input {
+    width: 100%;
+    padding: 12px;
+    border: 1.5px solid var(--card-background);
+    border-radius: 8px;
+    font-size: 1rem;
+    font-family: var(--font-secondary);
+    transition: border-color 0.3s ease;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 4px rgba(76, 175, 80, 00.3);
+}
+
+/* Petit texte d'aide */ 
+
+.password-hint {
+    display: block;
+    font-size: 0.85rem;
+    color: #777;
+    text-align: center;
+    margin-top: 6px;
+}
+
+/* Bouton principal */ 
+
+.btn-primary {
+    margin-bottom: 24px;
+}
+
+/* Lien redirection vers connexion */ 
+
+.redirect-login {
+    margin-top: 20px;
+    font-size: 0.95rem;
+    color: var(--text-dark);
+}
+
+.redirect-login a:hover {
+    text-decoration: underline;
+}
+
+/* Message de retour (erreur ou succès) */ 
+
+.message {
+    margin-top: 15px;
+    font-size: 0.95rem;
+    font-weight: 500;
+}
+
+.message.error {
+    color: var(--error);
+}
+
+.message.sucess {
+    color: var(--success);
+}
+

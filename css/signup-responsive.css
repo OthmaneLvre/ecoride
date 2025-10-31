@@ -1,0 +1,51 @@
+/* ------- RESPONSIVE DESIGN - Page signup.html ------- */ 
+/* Mobile (max-width: 768px) */
+
+@media screen and (max-width: 768px) {
+    .signup-container {
+        padding: 20px 10px;
+        align-items: flex-start;
+        background-color: var(--text-light);
+    }
+
+    .signup-form {
+        width: 100%;
+        max-width: 100%;
+        border-radius: 0;
+        box-shadow: none;
+        background-color: var(--background);
+        padding: 30px 15px;
+    }
+
+    .signup-form h1 {
+        font-size: 1.6rem;
+        margin-bottom: 20px;
+    }
+
+    .form-group label {
+        font-size: 0.9rem;
+    }
+
+    .form-group input {
+        padding: 10px;
+        font-size: 0.95rem;
+    }
+
+    .password-hint {
+        font-size: 0.8rem;
+    }
+
+    .btn-primary {
+        padding: 10px;
+        font-size: 0.95rem;
+    }
+
+    .redirect-login {
+        font-size: 0.9rem;
+        margin-top: 15px;
+    }
+
+    .message {
+        font-size: 0.9rem;
+    }
+}
