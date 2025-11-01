@@ -190,6 +190,23 @@ main {
     display: none;
 }
 
+/* Bouton deconnexion */ 
+.logout-btn {
+  padding: 8px 14px;
+  border-radius: 6px;
+  border: 1px solid var(--primary);
+  background: #e7f3ee;
+  color: var(--primary);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.logout-btn:hover {
+  background: var(--primary);
+  color: #fff;
+}
+
 
 /* Effet hover sur les liens */ 
 .nav-links a:hover {

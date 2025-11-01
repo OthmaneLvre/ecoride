@@ -51,12 +51,12 @@ function initBurgerMenu() {
     mobileMenu.classList.toggle("active");
   });
 
-  links.forEach((link) => {
+  for(const link of links) {
     link.addEventListener("click", () => {
       burger.classList.remove("active");
       mobileMenu.classList.remove("active");
     });
-  });
+  }
 }
 
 
@@ -116,7 +116,7 @@ if (searchForm) {
 }
 
 // --- ÉTAT GLOBAL DE CONNEXION UTILISATEUR ---
-window.isLoggedIn = false; // false = visiteur, true = utilisateur
+globalThis.isLoggedIn = false; // false = visiteur, true = utilisateur
 
 // --- SYNCHRO NAV AVEC ETAT UTILISATEUR ---
 function updateNavLinks() {
@@ -124,64 +124,85 @@ function updateNavLinks() {
     {
       login: document.getElementById("link-login-desktop"),
       register: document.getElementById("link-register-desktop"),
-      account: document.getElementById("link-account-desktop")
+      account: document.getElementById("link-account-desktop"),
+      logout: document.getElementById("link-logout-desktop")
     },
     {
       login: document.getElementById("link-login-mobile"),
       register: document.getElementById("link-register-mobile"),
-      account: document.getElementById("link-account-mobile")
+      account: document.getElementById("link-account-mobile"),
+      logout: document.getElementById("link-logout-mobile")
     }
   ];
 
   // Boucle sur les deux versions de la nav (desktop + mobile )
-  navSets.forEach(set => {
-    if (!set.login || !set.register || !set.account) return;
+  for(const set of navSets) {
+    if (!set.login || !set.register || !set.account || !set.logout) continue;
 
     if (isLoggedIn) {
       set.login.classList.add("hidden");
       set.register.classList.add("hidden");
       set.account.classList.remove("hidden");
+      set.logout.classList.remove("hidden");
     } else {
       set.login.classList.remove("hidden");
       set.register.classList.remove("hidden");
       set.account.classList.add("hidden");
+      set.logout.classList.add("hidden");
     }
-  });
+  }
 }
 
-// --- FONCTION DE SIMULATION CONNEXION / DECONNEXION ---
+// --- GESTION CONNEXION / DECONNEXION ---
 function initLoginSimulation() {
-  const loginLink = document.getElementById("link-login-desktop");
-  const logoutLink = document.getElementById("link-account-desktop");
+  const loginLinkDesktop = document.getElementById("link-login-desktop");
+  const accountLinkDesktop = document.getElementById("link-account-desktop");
+  const logoutLinkDesktop = document.getElementById("link-logout-desktop");
+  const logoutLinkMobile = document.getElementById("link-logout-mobile");
 
-  if (!loginLink || !logoutLink) {
-    console.warn("Liens de connexion non trouvés, recheck dans 200ms...");
+  if (!loginLinkDesktop || !accountLinkDesktop) {
     setTimeout(initLoginSimulation, 200);
     return;
   }
 
-  // --- Connexion simulée ---
-  loginLink.addEventListener("click", (e) => {
-    e.preventDefault(); // on empêche la redirection
-    window.isLoggedIn = true;
-    localStorage.setItem("isLoggedIn", "true");
-    updateNavLinks();
-    alert("✅ Connexion simulée avec succès !");
-  });
+  // Connexion simulée 
+  if (loginLinkDesktop) {
+    loginLinkDesktop.addEventListener("click", (e) => {
+      e.preventDefault();
+      globalThis.isLoggedIn = true;
+      localStorage.setItem("isLoggedIn", "true");
+      updateNavLinks();
+      globalThis.location.href = "user-space.html"; // redirection vers espace utilisateur 
+    });
+  }
 
-  // --- Déconnexion simulée ---
-  logoutLink.addEventListener("click", (e) => {
-    e.preventDefault();
-    window.isLoggedIn = false;
-    localStorage.removeItem("isLoggedIn");
-    updateNavLinks();
-    alert("🚫 Déconnexion simulée !");
-  });
+  // Déconnexion réelle 
+  const handleLogout = () => {
+    const confirmLogout = confirm("Voulez-vous vraiment vous déconnecter ?");
+    if (confirmLogout) {
+      globalThis.isLoggedIn = false;
+      localStorage.removeItem("isLoggedIn");
+      localStorage.removeItem("userData");
+      localStorage.removeItem("userPhoto");
+      updateNavLinks();
+      alert("Déconnexion réussie !");
+      globalThis.location.href = "login.html"
+    }
+  };
+
+  if (logoutLinkDesktop) {
+    logoutLinkDesktop.addEventListener("click", handleLogout);
+  }
+
+  if (logoutLinkMobile) {
+    logoutLinkMobile.addEventListener("click", handleLogout);
+  }
+
 
   // --- Restauration automatique de l’état ---
   const savedLogin = localStorage.getItem("isLoggedIn");
   if (savedLogin === "true") {
-    window.isLoggedIn = true;
+    globalThis.isLoggedIn = true;
     updateNavLinks();
   }
 }
@@ -195,7 +216,7 @@ document.addEventListener("DOMContentLoaded", updateNavLinks);
 if (typeof toggleBtn !== "undefined" && toggleBtn) {
   toggleBtn.addEventListener("click", () => {
     // Inversion du bouton de connexion 
-    isLoggedIn = !isLoggedIn;
+    globalThis.isLoggedIn = !globalThis.isLoggedIn;
 
     // Mise à jour visuelle de la nav 
     updateNavLinks();

@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EcoRide - Espace utilisateur</title>
+
+        <!-- Favicon -->
+    <link rel="icon" href="assets/icons/favicon.png" type="image/png">
+
+       <!-- Google Fonts : Poppins (Titres)-->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/user-space.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    <link rel="stylesheet" href="css/user-space-responsive.css">
+
+</head>
+<body>
+    <!-- HEADER -->
+     <div id="header"></div>
+
+    <main class="user-space">
+
+        <!-- Titre principal -->
+        <section class="intro">
+            <h1>Mon espace utilisateur</h1>
+            <p>Gérez vos informations, votre rôle et vos préférences de covoiturage.</p>
+        </section>
+
+        <!-- Informations personnelles -->
+        <section class="personal-info">
+            <h2>Mes informations personnelles</h2>
+
+            <div class="info-grid">
+                <!-- Photo -->
+                <div class="info-item photo-section">
+                    <label for="user-photo">Photo de profil</label>
+                    <div class="photo-preview">
+                        <img id="photo-display" src="assets/images/default-user.png" alt="Photo de profil">
+                    </div>
+                    <input type="file" id="user-photo" accept="image/*">
+                </div>
+
+                <!-- Pseudo -->
+                <div class="info-item">
+                    <label for="user-pseudo">Pseudo</label>
+                    <input type="text" id="user-pseudo" placeholder="Votre pseudo">
+                </div>
+
+                <!-- Nom -->
+                <div class="info-item">
+                    <label for="user-lastname">Nom</label>
+                    <input type="text" id="user-lastname" placeholder="Entrez votre nom">
+                </div>
+
+                <!-- Prénom -->
+                <div class="info-item">
+                    <label for="user-firstname">Prénom</label>
+                    <input type="text" id="user-firstname" placeholder="Entrez votre prénom">
+                </div> 
+
+                <!-- Date de naissance -->
+                <div class="info-item">
+                    <label for="user-birthdate">Date de naissance</label>
+                    <input type="date" id="user-birthdate">
+                </div> 
+
+                <!-- Numéro de téléphone -->
+                <div class="info-item">
+                    <label for="user-phone">Téléphone</label>
+                    <input type="tel" id="user-phone" placeholder="06 00 00 00 00">
+                </div> 
+
+                <!-- Adresse -->
+                <div class="info-item">
+                    <label for="user-address">Adresse</label>
+                    <input type="text" id="user-address" placeholder="Ex: 12 rue du Ventous, Céret">
+                </div> 
+            </div>
+        </section>
+
+        <!-- Sélection du rôle -->
+         <section class="user-role">
+            <h2>Mon rôle</h2>
+            <div class="role-options">
+                <label>
+                    <input type="radio" name="role" value="passager">
+                    Passager
+                </label>
+                <label>
+                    <input type="radio" name="role" id="chauffeur" value="chauffeur">
+                    Chauffeur
+                </label>
+                <label>
+                    <input type="radio" name="role" id="les-deux" value="les-deux">
+                    Chauffeur & Passager
+                </label>
+            </div>
+         </section>
+
+         <!-- Formulaire chauffeur -->
+        <section class="driver-info hidden" id="driver-section">
+            <h2>Informations chauffeur</h2>
+
+            <!-- Bloc véhicule -->
+            <div class="vehicles">
+                <h3>Mes véhicules</h3>
+                <div id="vehicle-list">
+                    <!-- Les cartes véhicules ajoutées dynamiquement apparaitront ici -->
+                </div>
+                <button id="add-vehicle-btn" class="btn-primary">+ Ajouter un véhicule</button>
+            </div>
+
+             <!-- Bloc préférences -->
+            <div class="preferences">
+                <h3>Mes préférences</h3>
+                <div class="preferences-default">
+                    <label>
+                        <input type="checkbox" id="smoker"> Accepte les fumeurs
+                    </label>
+                    <label>
+                        <input type="checkbox" id="animal"> Accepte les animaux
+                    </label>
+                </div>    
+
+            <!-- Bloc préférences personnalisées -->
+            <div class="preferences-custom">
+                <h3>Préférences personnalisées</h3>
+                <div class="add-preference">
+                    <input type="text" id="custom-preference" placeholder="Ex : Musique calme">
+                    <button id="add-preference-btn" class="btn-primary">+</button>
+                </div>
+                <ul id="custom-preference-list">
+                    <!-- Les préférences personnalisées ajoutées apparaîtront ici -->
+                </ul>
+            </div>    
+        </section>
+
+          <!-- Bouton sauvegarde -->
+        <section class="save-section">
+            <button id="save-btn" class="btn-primary">Enregistrer les modifications</button>
+        </section>
+
+    </main>
+
+        <!-- FOOTER -->
+     <div id="footer"></div>
+    
+     <script src="js/main.js"></script>
+     <script src="js/user-space.js"></script>
+</body>
+</html>

@@ -1,0 +1,172 @@
+/* ----EcoRide - Espace Utilisateur ---- */ 
+/* ---- Version Mobile (<768px) ---- */
+
+@media screen and (max-width: 768px) {
+
+  /* Structure générale */
+  .user-space {
+    width: 90%;
+    margin: 100px auto 60px;
+    padding: 0 10px;
+  }
+
+  /* Intro */
+  .intro h1 {
+    font-size: 1.8rem;
+  }
+
+  .intro p {
+    font-size: 0.9rem;
+  }
+
+  /* Rôle utilisateur */
+  .user-role {
+    padding: 20px;
+  }
+
+  .user-role h2 {
+    font-size: 1.2rem;
+    text-align: center;
+  }
+
+  .role-options {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .role-options label {
+    font-size: 0.95rem;
+  }
+
+  /* Bloc chauffeur */
+  .driver-info {
+    padding: 20px;
+  }
+
+  .driver-info h2 {
+    font-size: 1.2rem;
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
+  /* ---- Véhicules ---- */
+  .vehicles h3 {
+    text-align: center;
+    font-size: 1.1rem;
+  }
+
+  #vehicle-list {
+    gap: 15px;
+  }
+
+  .vehicle-card {
+    grid-template-columns: 1fr; /* une seule colonne sur mobile */
+    gap: 10px;
+    padding: 15px;
+  }
+
+  .vehicle-card input {
+    font-size: 0.9rem;
+    padding: 8px;
+  }
+
+  .vehicle-card .remove-vehicle {
+    grid-column: 1;
+    font-size: 0.9rem;
+    padding: 8px;
+  }
+
+  /* Bouton ajouter véhicule */
+  #add-vehicle-btn {
+    width: 100%;
+    font-size: 0.95rem;
+    padding: 10px;
+  }
+
+  /* ---- Préférences ---- */
+  .preferences {
+    padding: 20px;
+  }
+
+  .preferences h3 {
+    font-size: 1.1rem;
+    text-align: center;
+  }
+
+  .preferences-default {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .preferences-default label {
+    font-size: 0.95rem;
+  }
+
+  /* ---- Préférences personnalisées ---- */
+  .preferences-custom h3 {
+    font-size: 1.1rem;
+    text-align: center;
+  }
+
+  .add-preference {
+    flex-direction: column;
+  }
+
+  .add-preference input {
+    width: 100%;
+    font-size: 0.9rem;
+    padding: 8px;
+  }
+
+  .add-preference button {
+    width: 100%;
+    margin-top: 10px;
+    padding: 10px;
+    font-size: 1rem;
+  }
+
+  #custom-preference-list li {
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 10px 12px;
+  }
+
+
+ /* ---- Informations personnelles ---- */
+  .personal-info {
+    padding: 20px;
+  }
+
+  .personal-info h2 {
+    font-size: 1.2rem;
+    text-align: center;
+  }
+
+  .info-grid {
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
+
+  .photo-preview {
+    width: 100px;
+    height: 100px;
+  }
+
+  .info-item input {
+    font-size: 0.9rem;
+    padding: 8px;
+  }
+
+  /* ---- Bouton principal de sauvegarde ---- */
+  .save-section {
+    text-align: center;
+    margin-top: 30px;
+  }
+
+  .save-section .btn-primary {
+    width: 100%;
+    padding: 12px;
+    font-size: 1rem;
+  }
+}
