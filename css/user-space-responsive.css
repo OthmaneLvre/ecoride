@@ -77,6 +77,12 @@
     padding: 8px;
   }
 
+  .vehicle-card input[readonly],
+  .vehicle-card input:disabled {
+    background: #f2f2f2;
+    cursor: not-allowed;
+  }
+
   /* Bouton ajouter véhicule */
   #add-vehicle-btn {
     width: 100%;
@@ -161,12 +167,36 @@
   /* ---- Bouton principal de sauvegarde ---- */
   .save-section {
     text-align: center;
-    margin-top: 30px;
   }
 
   .save-section .btn-primary {
     width: 100%;
     padding: 12px;
     font-size: 1rem;
+  }
+
+/* ---- SECTION - SAISIR UN NOUVEAU VOYAGE ---- */ 
+  .trip-section {
+    padding: 20px;
+  }
+
+  .trip-section h2 {
+    font-size: 1.2rem;
+    text-align: center;
+  }
+
+  .info-message {
+    font-size: 0.75rem;
+    text-align: center;
+  }
+
+  .trip-form {
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
+
+  .form-group input {
+    font-size: 0.9rem;
+    padding: 8px;
   }
 }

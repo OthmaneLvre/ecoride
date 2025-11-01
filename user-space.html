@@ -145,6 +145,94 @@
             <button id="save-btn" class="btn-primary">Enregistrer les modifications</button>
         </section>
 
+        <!-- SECTION SAISIR UN VOYAGE -->
+        <section id="create-trip" class="trip-section">
+            <h2 class="section-title">Saisir un nouveau voyage</h2>
+
+            <!-- Message d'information sur les crédits -->
+            <p class="info-message">
+                Note : 2 crédits sont prélevés sur chaque trajet publié. 
+            </p>
+
+            <!-- Formulaire de saisie de trajet -->
+            <form id="trip-form" class="trip-form">
+
+                <!-- Champ départ -->
+                <div class="form-group">
+                    <label for="departure">Adresse de départ :</label>
+                    <input type="text" name="departure" id="departure" placeholder="Ex: 10 rue Ventous - Perpignan" required>
+                </div> 
+
+                <!-- Champs arrivée -->
+                <div class="form-group">
+                    <label for="arrival">Adresse d'arrivée</label>
+                    <input type="text" name="arrival" id="arrival" placeholder="Ex : 24 rue des Abricots - Lyon" required>
+                </div>
+
+                <!-- Date et heure -->
+                <div class="form-inline">
+                    <div class="form-group">
+                        <label for="dateDeparture">Date de départ :</label>
+                        <input type="date" name="dateDeparture" id="dateDeparture" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="timeDeparture">Heure de départ :</label>
+                        <input type="time" name="timeDeparture" id="timeDeparture" required>
+                    </div>
+                </div>
+                
+                <!-- Places disponibles -->
+                <div class="form-group">
+                    <label for="seats">Nombre de place disponibles :</label>
+                    <input type="number" name="seats" id="seats" min="1" max="10" required>
+                </div>
+
+                <!-- Prix -->
+                <div class="form-group">
+                    <label for="price">Prix total du trajet (€)</label>
+                    <input type="number" name="price" id="price" step="0.5" min="0" placeholder="Ex : 25.50" required>
+                </div>
+
+                <!-- Sélection du véhicule -->
+                <div class="form-group">
+                    <label for="vehicle">Sélectionner un véhicule</label>
+                    <select name="vehicle" id="vehicle">
+                    <option value="">-- Choisissez un véhicule --</option>
+                    <!-- Options ajoutées via JS -->
+                    </select>
+                </div>
+
+                <!-- Ajouter un nouveau véhicule -->
+                <div class="form-group new-vehicle-option">
+                    <label>
+                        <input type="checkbox" name="addVehicle" id="addVehicle">
+                        Ajouter un véhicule
+                    </label>
+                </div>
+                
+                <!-- Message de redirection -->
+                <div id="redirect-add-vehicle" class="hidden redirect-message">
+                    <p>Pour ajouter un nouveau véhicule rendez-vous dans la section "Mes véhicules".</p>
+                    <button type="button" id="btnGoVehicle" class="btn-secondary">
+                        Ajouter un véhicule
+                    </button>
+                </div>
+
+                <!-- Bouton publier -->
+                <div class="form-group">
+                    <button type="submit" class="btn-primary">Publier le trajet</button>
+                </div>
+
+                <!-- Message de confirmation -->
+                <p id="confirm-message" class="confirm-message hidden">
+                    Votre trajet a bien été ajouté et sera visible sur la page des coivoiturages ! 
+                </p> 
+
+            </form> 
+
+        </section> 
+
     </main>
 
         <!-- FOOTER -->
