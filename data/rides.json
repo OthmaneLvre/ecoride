@@ -17,6 +17,7 @@
     "carBrand": "Volkswagen",
     "carModel": "Golf IV",
     "preferences": ["Fumeur", "N'accepte pas les animaux", "Aime la musique"],
+    "participants": ["Laura", "Othmane"],
     "reviews": [
       {"auteur": "Emilie", "note": 5, "commentaire": "Excellent trajet!"},
       {"auteur": "Steve", "note": 4.5, "commentaire": "Conduite agréable."}
@@ -28,8 +29,8 @@
     "photo": "assets/images/avatar/driver2.jpg",
     "rating": 5,
     "price": "18,30 €",
-    "departureDate": "25/10/2025",
-    "arrivalDate": "25/10/2025",
+    "departureDate": "12/11/2025",
+    "arrivalDate": "12/11/2025",
     "departureCity": "Céret",
     "departureTime": "10:30",
     "arrivalCity": "Montpellier",
@@ -40,8 +41,9 @@
     "carBrand": "Volkswagen",
     "carModel": "Golf IV",
     "preferences": ["Non fumeur", "Accepte les animaux", "Pas de musique"],
+    "participants": ["Othmane", "Nicolas"],
     "reviews": [
-      {"auteur": "Laura", "note": 5, "commentaire": "Excellent trajet!"},
+      {"auteur": "Typhaine", "note": 5, "commentaire": "Excellent trajet!"},
       {"auteur": "Nicolas", "note": 4, "commentaire": "Conduite agréable."}
     ] 
   },
@@ -51,8 +53,8 @@
     "photo": "assets/images/avatar/driver3.jpg",
     "rating": 4.5,
     "price": "22,10 €",
-    "departureDate": "25/10/2025",
-    "arrivalDate": "25/10/2025",
+    "departureDate": "15/10/2025",
+    "arrivalDate": "15/10/2025",
     "departureCity": "Banyuls-sur-mer",
     "departureTime": "07:30",
     "arrivalCity": "Toulouse",
@@ -63,8 +65,9 @@
     "carBrand": "Volkswagen",
     "carModel": "Golf IV",
     "preferences": ["Non fumeur", "Accepte les animaux", "Pause café possible"],
+    "participants": ["Laura", "Othmane"],
     "reviews": [
-      {"auteur": "Laura", "note": 5, "commentaire": "Excellent trajet!"},
+      {"auteur": "Christophe", "note": 5, "commentaire": "Excellent trajet!"},
       {"auteur": "Nicolas", "note": 4, "commentaire": "Conduite agréable."}
     ] 
   },
@@ -86,9 +89,10 @@
     "carBrand": "Renault",
     "carModel": "Zoé",
     "preferences": ["Non fumeur", "Accepte les animaux", "Pause café possible"],
+    "participants": ["Laura", "Othmane"],
     "reviews": [
       {"auteur": "Laura", "note": 5, "commentaire": "Excellent trajet!"},
-      {"auteur": "Nicolas", "note": 4, "commentaire": "Conduite agréable."}
+      {"auteur": "Jean-Charles", "note": 4, "commentaire": "Conduite agréable."}
     ] 
   },
    {
@@ -109,6 +113,7 @@
     "carBrand": "Renault",
     "carModel": "Zoé",
     "preferences": ["Non fumeur", "Accepte les animaux", "Pause café possible"],
+    "participants": ["Laura", "Othmane"],
     "reviews": [
       {"auteur": "Laura", "note": 5, "commentaire": "Excellent trajet!"},
       {"auteur": "Nicolas", "note": 4, "commentaire": "Conduite agréable."}
@@ -132,6 +137,7 @@
     "carBrand": "Renault",
     "carModel": "Zoé",
     "preferences": ["Fumeur", "Accepte les animaux", "Aime discuter"],
+    "participants": ["Laura", "Othmane"],
     "reviews": [
       {"auteur": "Laura", "note": 5, "commentaire": "Excellent trajet! Discussion agréable, je recommande Julie."},
       {"auteur": "Nicolas", "note": 4, "commentaire": "Conduite agréable."}
@@ -155,6 +161,7 @@
     "carBrand": "Citroën",
     "carModel": "C3",
     "preferences": ["Non fumeur", "Accepte les animaux", "Pause café possible"],
+    "participants": ["Laura", "Othmane"],
     "reviews": [
       {"auteur": "Laura", "note": 5, "commentaire": "Excellent trajet!"},
       {"auteur": "Nicolas", "note": 4, "commentaire": "Conduite agréable."}
@@ -178,6 +185,7 @@
     "carBrand": "Renault",
     "carModel": "Zoé",
     "preferences": ["Non fumeur", "Accepte les animaux", "Pause café possible"],
+    "participants": ["Laura", "Othmane"],
     "reviews": [
       {"auteur": "Laura", "note": 5, "commentaire": "Excellent trajet!"},
       {"auteur": "Nicolas", "note": 4, "commentaire": "Conduite agréable."}
@@ -201,6 +209,7 @@
     "carBrand": "Renault",
     "carModel": "Zoé",
     "preferences": ["Non fumeur", "Accepte les animaux", "Pause café possible"],
+    "participants": ["Laura", "Othmane"],
     "reviews": [
       {"auteur": "Laura", "note": 5, "commentaire": "Excellent trajet!"},
       {"auteur": "Nicolas", "note": 4, "commentaire": "Conduite agréable."}
@@ -224,9 +233,33 @@
     "carBrand": "Renault",
     "carModel": "Zoé",
     "preferences": ["Non fumeur", "Accepte les animaux", "Pause café possible"],
+    "participants": ["Laura", "Othmane"],
     "reviews": [
       {"auteur": "Laura", "note": 5, "commentaire": "Excellent trajet!"},
       {"auteur": "Nicolas", "note": 4, "commentaire": "Conduite agréable."}
     ] 
+  },
+  {
+    "id": 11,
+    "driverName": "Othmane",
+    "photo": "assets/images/avatar/driver1.jpg",
+    "rating": 4.9,
+    "price": "15,00 €",
+    "departureDate": "10/11/2025",
+    "arrivalDate": "10/11/2025",
+    "departureCity": "Céret",
+    "departureTime": "09:00",
+    "arrivalCity": "Perpignan",
+    "arrivalTime": "09:45",
+    "eco": true,
+    "seats": 3,
+    "energy": "Électrique",
+    "carBrand": "Tesla",
+    "carModel": "Model 3",
+    "preferences": ["Non fumeur", "Accepte les animaux", "Musique douce"],
+    "participants": ["Laura", "José"],
+    "reviews": [
+      { "auteur": "Laura", "note": 5, "commentaire": "Excellent trajet, merci !" }
+    ]
   }
 ]

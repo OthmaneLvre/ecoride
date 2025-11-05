@@ -19,6 +19,7 @@ function loadHTML(id, file) {
 
         // Header bien injecté pour gérer la connexion 
         initLoginSimulation();
+        updateNavLinks();
       }
     })
     .catch((error) => console.error(error));
@@ -125,13 +126,15 @@ function updateNavLinks() {
       login: document.getElementById("link-login-desktop"),
       register: document.getElementById("link-register-desktop"),
       account: document.getElementById("link-account-desktop"),
-      logout: document.getElementById("link-logout-desktop")
+      logout: document.getElementById("link-logout-desktop"),
+      history : document.getElementById("link-history-desktop")
     },
     {
       login: document.getElementById("link-login-mobile"),
       register: document.getElementById("link-register-mobile"),
       account: document.getElementById("link-account-mobile"),
-      logout: document.getElementById("link-logout-mobile")
+      logout: document.getElementById("link-logout-mobile"),
+      history : document.getElementById("link-history-mobile")
     }
   ];
 
@@ -144,11 +147,15 @@ function updateNavLinks() {
       set.register.classList.add("hidden");
       set.account.classList.remove("hidden");
       set.logout.classList.remove("hidden");
+
+    if (set.history) set.history.classList.remove("hidden")    
     } else {
       set.login.classList.remove("hidden");
       set.register.classList.remove("hidden");
       set.account.classList.add("hidden");
       set.logout.classList.add("hidden");
+
+      if (set.history) set.history.classList.add("hidden");
     }
   }
 }
