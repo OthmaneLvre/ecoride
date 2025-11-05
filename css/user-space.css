@@ -391,3 +391,72 @@
 .form-group .btn-primary {
   text-align: center;
 }
+
+
+/* --- MES COVOITURAGES (Chauffeur) --- */ 
+
+.btn-start-trip,
+.btn-stop-trip {
+  display: inline-block;
+  padding: 10px 18px;
+  border: none;
+  border-radius: 8px;
+  color: var(text-light);
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.btn-start-trip {
+  background-color: var(--primary);
+}
+
+.btn-start-trip:hover {
+  background-color: var(--secondary);
+}
+
+.btn-stop-trip {
+  background-color: #fd7e14;
+}
+
+.btn-stop-trip:hover {
+  background-color: #e36a05;
+}
+
+.ride-status.ended {
+  color:  #6c757d;
+  font-style: italic;
+}
+
+/* --- Covoiturages à valider --- */
+
+.pending-card {
+  border: 1px solid var(--secondary);
+  padding: 12px;
+  border-radius: 10px;
+  margin-bottom: 12px;
+  background-color: var(--card-background);
+}
+
+.pending-card button {
+  margin-right: 10px;
+  padding: 8px 14px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.btn-ok {
+  background-color: var(--primary);
+  color: var(--text-light);
+}
+
+.btn-ko {
+  background-color: var(--error);
+  color: var(--text-light);
+}
+
+.feedback {
+  margin-top: 10px;
+}
+
