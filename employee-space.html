@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EcoRide - Espace Employé</title>
+
+    <!-- Favicon -->
+    <link rel="icon" href="assets/icons/favicon.png" type="image/png">
+     
+    <!-- Google Fonts : Poppins (Titres)-->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+
+    <!-- Feuille de style principale -->
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="css/employee-space.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    <link rel="stylesheet" href="css/employee-space-responsive.css">
+
+</head>
+<body>
+    <!-- HEADER -->
+     <div id="header"></div> 
+
+    <main class="employee-container">
+
+        <!-- Section avis à valider -->
+        <section class="pending-reviews">
+            <h2>Avis en atente de validation</h2>
+            <div class="reviews-list">
+                <!-- Avis dynamiques injectées par JS -->
+                <p class="empty-msg">Aucun avis en attente</p> 
+            </div>
+        </section>
+
+        <!-- Section Covoiturages problématiques -->
+        <section class="bad-rides">
+            <h2>Covoiturages signalés</h2>
+            <div class="rides-list">
+                <!-- Trajets dynamiques injectées par JS -->
+                 <p class="empty-msg">Aucun covoiturage signalés</p>
+            </div>
+        </section>
+    
+    </main>
+
+    <!-- FOOTER -->
+    <div id="footer"></div>
+
+    <script src="js/main.js"></script>
+    <script src="js/employee-space.js"></script>   
+</body>
+</html>

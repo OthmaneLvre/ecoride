@@ -125,3 +125,40 @@
     font-size: italic;
     margin-top: 20px;   
 }
+
+
+/* Bouton Démarrer / Terminer */ 
+.btn-start,
+.btn-end {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 8px 16px;
+    font-family: var(--font-secondary);
+    font-weight: 500;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+}
+
+/* Bouton Démarrer */ 
+.btn-start {
+    background-color: var(--primary);
+    color: var(--text-light);
+}
+
+.btn-start:hover {
+    background-color: var(--secondary);
+}
+
+/* Bouton Arrivée */ 
+.btn-end {
+    background-color: var(--secondary);
+    color: var(--text-light);
+    opacity: 1;
+    transition: opacity 0.2s ease-in-out;
+}
+
+.btn-end:hover {
+    opacity: 0.8;
+}

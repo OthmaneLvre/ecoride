@@ -333,10 +333,10 @@ tripForm.addEventListener("submit", (e) => {
 
   // Récupération des données saisies
   const newTrip = {
-    departure: document.getElementById("departure").value.trim(),
-    arrival: document.getElementById("arrival").value.trim(),
-    date: document.getElementById("dateDeparture").value,
-    time: document.getElementById("timeDeparture").value,
+    departureCity: document.getElementById("departure").value.trim(),
+    arrivalCity: document.getElementById("arrival").value.trim(),
+    departureDate: document.getElementById("dateDeparture").value,
+    departureTime: document.getElementById("timeDeparture").value,
     seats: Number.parseInt(document.getElementById("seats").value),
     price: Number.parseFloat(document.getElementById("price").value),
     vehicle: document.getElementById("vehicle").value,
@@ -346,10 +346,10 @@ tripForm.addEventListener("submit", (e) => {
 
   // Vérification des champs obligatoires
   if (
-    !newTrip.departure ||
-    !newTrip.arrival ||
-    !newTrip.date ||
-    !newTrip.time ||
+    !newTrip.departureCity ||
+    !newTrip.arrivalCity ||
+    !newTrip.departureDate ||
+    !newTrip.departureTime ||
     !newTrip.vehicle
   ) {
     alert(" Veuillez remplir tous les champs avant de publier votre trajet.");
