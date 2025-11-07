@@ -22,6 +22,17 @@ function updateVehicleSelect() {
   }
 }
 
+// Fonction crédits 
+function displayDriverCredits() {
+  const currentUserId = localStorage.getItem("currentUserId") || "1";
+  const userCredits = JSON.parse(localStorage.getItem("userCredits")) || {};
+  const creditDisplay = document.getElementById("driver-credit");
+  if (creditDisplay) {
+    creditDisplay.textContent = userCredits[currentUserId] || 0;
+  }
+}
+document.addEventListener("DOMContentLoaded", displayDriverCredits);
+
 // Sélecteurs
 const roleInputs = document.querySelectorAll('input[name="role"]');
 const driverSection = document.getElementById('driver-section');
@@ -322,10 +333,10 @@ tripForm.addEventListener("submit", (e) => {
 
   // Récupération des données saisies
   const newTrip = {
-    departure: document.getElementById("departure").value.trim(),
-    arrival: document.getElementById("arrival").value.trim(),
-    date: document.getElementById("dateDeparture").value,
-    time: document.getElementById("timeDeparture").value,
+    departureCity: document.getElementById("departure").value.trim(),
+    arrivalCity: document.getElementById("arrival").value.trim(),
+    departureDate: document.getElementById("dateDeparture").value,
+    departureTime: document.getElementById("timeDeparture").value,
     seats: Number.parseInt(document.getElementById("seats").value),
     price: Number.parseFloat(document.getElementById("price").value),
     vehicle: document.getElementById("vehicle").value,
@@ -335,10 +346,10 @@ tripForm.addEventListener("submit", (e) => {
 
   // Vérification des champs obligatoires
   if (
-    !newTrip.departure ||
-    !newTrip.arrival ||
-    !newTrip.date ||
-    !newTrip.time ||
+    !newTrip.departureCity ||
+    !newTrip.arrivalCity ||
+    !newTrip.departureDate ||
+    !newTrip.departureTime ||
     !newTrip.vehicle
   ) {
     alert(" Veuillez remplir tous les champs avant de publier votre trajet.");
@@ -348,7 +359,10 @@ tripForm.addEventListener("submit", (e) => {
   // Récupération de la liste des trajets déjà enregistrés
   const trips = JSON.parse(localStorage.getItem("trips")) || [];
 
+
+
   // Ajout du nouveau trajet
+  newTrip.status = "à venir"; // état initial du trajet 
   trips.push(newTrip);
 
   // Enregistrement dans le localStorage
@@ -373,3 +387,227 @@ tripForm.addEventListener("submit", (e) => {
   loadUserData();         // charge toutes les infos utilisateur
   updateVehicleSelect();  // met à jour la liste déroulante des véhicules
   });
+
+  // ---- GESTION DEMARRER / ARRETER UN COVOITURAGE ---- 
+
+  // Fonction d'affichage des trajets chauffeur avec boutons dynamiques 
+  function displayDriverTrips() {
+    const tripsContainer = document.getElementById("driver-trips");
+    if (!tripsContainer) return; 
+
+    const trips = JSON.parse(localStorage.getItem("trips")) || [];
+    const currentUserId = localStorage.getItem("currentUserId") || "1";
+
+    // Filtrer les trajets créés par le chauffeur connecté 
+    const myTrips = trips.filter(t => t.id_user === currentUserId);
+
+    // Nettoyer le conteneur avant affichage 
+    tripsContainer.innerHTML = "";
+
+    for(const trip of myTrips) {
+      const card = document.createElement("div");
+      card.classList.add("ride-card");
+      card.dataset.rideId = trip.id;
+
+      card.innerHTML = `
+        <div class="ride-info">
+          <h3>${trip.departure} -> ${trip.arrival}</h3>
+          <p>Date : ${trip.date} à ${trip.time}</p>
+          <Places : ${trip.seats} | Prix : ${trip.price} €</p>
+          <p>Statut : <span class="ride-status">${trip.status || "à venir"}</span></p>
+        </div>
+        <div class="ride-actions"></div>
+      `;
+
+      const btnContainer = card.querySelector(".ride-actions");
+      const statusEl = card.querySelector(".ride-status");
+
+      // Fonction d'affichage des boutons selon le statut
+      const updateButton = () => {
+        btnContainer.innerHTML = "";
+        statusEl.textContent = trip.status;
+
+        if (trip.status === "à venir") {
+          const startBtn = document.createElement("button");
+          startBtn.textContent = "Démarrer le trajet";
+          startBtn.classList.add("btn-start-trip");
+          startBtn.addEventListener("click", () => {
+            trip.status = "en cours";
+            saveTrips(trips);
+            updateButton();
+          });
+          btnContainer.appendChild(startBtn);
+        
+        } else if (trip.status === "en cours") {
+          const stopBtn = document.createElement("button");
+          stopBtn.textContent = "Arrivée à destination";
+          stopBtn.classList.add("btn-stop-trip");
+          stopBtn.addEventListener("click", () => {
+            trip.status = "terminé";
+            saveTrips(trips);
+            updateButton();
+
+            // --- Simulation notification mail ---
+            alert("Trajet terminé ! Les passagers reçoivent une notification pour valider le trajet.");
+
+            // Simulation de passagers pour ce trajet
+            const participants = trip.participants || ["2", "3"]; // passagers fictifs
+
+            // Récupère ou crée la clé pendingValidations
+            const pendingValidations = JSON.parse(localStorage.getItem("pendingValidations")) || {};
+
+            // Ajoute le trajet à valider pour chaque passager
+            for(const pid of participants) {
+            if (!pendingValidations[pid]) pendingValidations[pid] = [];
+            pendingValidations[pid].push({
+              tripId: trip.id,
+              departure: trip.departure,
+              arrival: trip.arrival,
+              date: trip.date,
+              time: trip.time,
+              driverId: trip.id_user
+            });
+          }
+
+          // Sauvegarde dans le localStorage
+          localStorage.setItem("pendingValidations", JSON.stringify(pendingValidations));
+        });
+        btnContainer.appendChild(stopBtn);
+
+        } else if (trip.status === "terminé") {
+          const label = document.createElement("span");
+          label.textContent = "Trajet terminé";
+          label.classList.add("ride-status", "ended");
+          btnContainer.appendChild(label);
+        }
+      };
+
+      // Lancer le rendu 
+      updateButton();
+
+      tripsContainer.appendChild(card);
+    };
+  }
+
+  // Fonction utilitaire pour sauvegarder les trajets 
+  function saveTrips(trips) {
+    localStorage.setItem("trips", JSON.stringify(trips));
+  }
+
+  // charger les trajets chauffeur au démarrage
+  document.addEventListener("DOMContentLoaded", displayDriverTrips);
+
+
+  // --- AFFICHAGE DES TRAJETS A VALIDER (PASSAGER) ---
+
+  function displayPendingTrips() {
+    const container = document.getElementById("pending-trips");
+    if (!container) return;
+
+    const currentUserId = localStorage.getItem("currentUserId") || "2"; // simulation passager
+    const pendingValidations = JSON.parse(localStorage.getItem("pendingValidations")) || {};
+
+    const myTrips = pendingValidations[currentUserId] || [];
+
+    container.innerHTML = "<h2>Trajets à valider</h2>";
+
+    if (myTrips.length === 0) {
+      container.innerHTML += "<p>Aucun trajet en attente de validation.</p>";
+      return;
+    }
+
+    for(const trip of myTrips) {
+      const card = document.createElement("div");
+      card.classList.add("pending-card");
+      card.innerHTML = `
+        <h3>${trip.departure} -> ${trip.arrival}</h3>
+        <p>Date : ${trip.date} à ${trip.time}</p>
+        <button class="btn-ok">Tout s'est bien passé</button>
+        <button class="btn-ko">Problème rencontré</button>
+        <div class="feedback hidden">
+          <textarea placeholder="Décrivez le problème..." rows="2"></textarea>
+          <button class="btn-send">Envoyer</button>
+        </div>
+      `;
+
+      // Bouton ok 
+      card.querySelector(".btn-ok").addEventListener("click",() => {
+
+        // Demande une note 
+        const rating = prompt("Merci pour votre trajet ! Donnez une note au chaffeur");
+
+        if (rating && !Number.isNaN(rating) && rating >=1 && rating <= 5) {
+          const comment = prompt("Souhaitez-vous laisser un commentaire ? (facultatif)");
+
+          // Récupération du tableau avis 
+          const tripReviews = JSON.parse(localStorage.getItem("tripReviews")) || [];
+
+          // Ajout de l'avis 
+          tripReviews.push({
+            tripId: trip.tripId,
+            passengerId: currentUserId,
+            driverId: trip.driverId,
+            rating: Number(rating),
+            comment: comment || "",
+            status: "pending" // en attente de validation
+          });
+
+          // Sauvegarde dans le localStorage 
+          localStorage.setItem("tripReviews", JSON.stringify(tripReviews));
+
+          alert("Merci pour votre avis !");
+
+          // Mise à jour du crédit chauffeur 
+          updateDriverCredits(trip.driverId);
+
+          // Suppression du trajet validé 
+          removeValidatedTrip(currentUserId, trip.tripId);
+          displayPendingTrips();
+        } else {
+          alert("Veuillez entre une note valide entre 1 et 5.");
+        }
+      }); 
+        
+      // Bouton KO 
+      card.querySelector(".btn-ko").addEventListener("click", () => {
+        card.querySelector(".feedback").classList.remove("hidden");
+      });
+
+      // Bouton envoyer commentaire 
+      card.querySelector(".btn-send").addEventListener("click", () => {
+        const comment = card.querySelector("textarea").value.trim();
+        alert("Votre commentaire a été transmis à l'équipe : " + comment);
+        removeValidatedTrip(currentUserId, trip.tripId);
+        displayPendingTrips();
+      });
+
+      container.appendChild(card);
+    };
+  }
+
+  // Fonction utilitaire : supprimer un trajet validé dans la liste 
+  function removeValidatedTrip(userId, tripId) {
+    const pendingValidations = JSON.parse(localStorage.getItem("pendingValidations")) || {};
+    if (!pendingValidations[userId]) return;
+    pendingValidations[userId] = pendingValidations[userId].filter(t => t.tripId !== tripId);
+    localStorage.setItem("pendingValidations", JSON.stringify(pendingValidations));
+  }
+
+  // Fontion mise à jour du crédit chauffeur 
+  function updateDriverCredits(driverId) {
+    const userCredits = JSON.parse(localStorage.getItem("userCredits")) || {};
+
+    // Si le chauffeur n'a pas encore de crédit, on initialise 
+    if (!userCredits[driverId]) userCredits[driverId] = 0;
+
+    // on ajoute +5 crédits pour chaque trajet validé 
+    userCredits[driverId] +=5;
+
+    // Sauvegarde 
+    localStorage.setItem("userCredits", JSON.stringify(userCredits));
+
+    alert(`Crédits du chauffeur ${driverId} mis à jour : +5 points`);
+  }
+
+  // Charger à l'ouverture 
+  document.addEventListener("DOMContentLoaded", displayPendingTrips);

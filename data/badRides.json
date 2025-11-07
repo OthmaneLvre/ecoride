@@ -1,0 +1,22 @@
+[
+  {
+    "id": 101,
+    "driver": { "pseudo": "Lucas P.", "email": "lucas.ride@ecoride.fr" },
+    "passager": { "pseudo": "Othmane L.", "email": "othmane.user@ecoride.fr" },
+    "departure": "Céret",
+    "arrival": "Perpignan",
+    "dateDeparture": "2025-11-02 08:00",
+    "dateArrival": "2025-11-02 09:00",
+    "description": "Le passager a signalé une conduite dangereuse sur autoroute."
+  },
+  {
+    "id": 102,
+    "driver": { "pseudo": "Marie L.", "email": "marie.drive@ecoride.fr" },
+    "passager": { "pseudo": "Nicolas R.", "email": "nicolas.passager@ecoride.fr" },
+    "departure": "Argelès-sur-Mer",
+    "arrival": "Perpignan",
+    "dateDeparture": "2025-11-03 14:30",
+    "dateArrival": "2025-11-03 15:00",
+    "description": "Problème signalé : discussion tendue durant le trajet."
+  }
+]
