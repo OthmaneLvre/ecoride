@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EcoRide - Espace Administrateur</title>
+
+        <!-- Favicon -->
+    <link rel="icon" href="assets/icons/favicon.png" type="image/png">
+     
+    <!-- Google Fonts : Poppins (Titres)-->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+
+    <!-- Feuille de style principale -->
+    <link rel="stylesheet" href="css/admin.css">
+    <link rel="stylesheet" href="css/admin-responsive.css">
+
+    <!-- Importation de la bibliothèque chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+</head>
+<body>
+    <header class="admin-header">
+        <h1>Espace Administrateur</h1>
+    </header>
+
+    <main class="admin-container">
+
+        <!-- Création d'un compte employé -->
+        <section class="create-employee">
+            <h2>Créer un compte employé</h2>
+            <form id="createEmployeeForm">
+                <input type="text" id="empName" placeholder="Nom complet" required>
+                <input type="email" id="empEmail" placeholder="Email" required>
+                <input type="password" id="empPassword" placeholder="Mot de passe" required>
+                <button type="submit" class="btn-primary">Créer</button>
+            </form>
+        </section>
+
+         <!-- Liste des employés -->
+        <section class="employee-list">
+            <h2>Liste des employés</h2>
+            <table>
+                <thead>
+                    <tr><th>Nom</th><th>Email</th><th>Statut</th><th>Action</th></tr>
+                </thead>
+                <tbody id="employeeTableBody"></tbody>
+            </table>
+        </section>
+
+             <!-- Liste des utilisateurs -->
+        <section class="user-list">
+            <h2>Liste des utilisateurs</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Nom</th>
+                        <th>Email</th>
+                        <th>Rôle</th>
+                        <th>Statut</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="userTableBody"></tbody>
+            </table>
+        </section>
+
+        <!-- Graphiques statistiques -->
+        <section class="charts">
+            <h2>Statistiques de la plateforme</h2>
+            <div class="chart-box">
+                <canvas id="ridesChart"></canvas>
+            </div>
+            <div class="chart-box">
+                <canvas id="creditsChart"></canvas>
+            </div>
+        </section>        
+
+        <!-- Total des crédits -->
+        <section class="total-credits">
+            <h2>Total des crédits gagnés</h2>
+            <p id="totalCredits">Chargement...</p>
+        </section>
+
+    </main>
+    
+<script src="js/admin.js"></script>
+
+</body>
+</html>

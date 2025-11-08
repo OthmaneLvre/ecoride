@@ -1,0 +1,105 @@
+/* EcoRide - FEUILLE DE STYLE RESPONSIVE CSS - Page admin.html */
+
+
+@media screen and (max-width: 768px) {
+
+    /* HEADER */
+
+    .admin-header {
+        text-align: center;
+        padding: 20px 0;
+    }
+
+    .admin-header h1 {
+        font-size: 1.6rem;
+    }
+
+    /* CONTENEUR */
+    .admin-container {
+        padding: 10px;
+        max-width: 95%;
+        margin: 0 auto;
+    }
+
+    /* Ajustement des sections */ 
+    .create-employee,
+    .employee-list,
+    .user-list,
+    .charts,
+    .total-credits {
+        margin: 0 auto 25px auto;
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    /* FORMULAIRE */
+    #createEmployeeForm {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    #createEmployeeForm button {
+        margin-top: 5px;
+        width: 100%;
+    }
+
+    /* TABLEAU EMPLOYÉS */
+    table {
+        width: 100%;
+        word-wrap: break-word;
+    }
+
+    table, thead, tbody, th, td, tr {
+        display: block;
+    }
+
+    thead {
+        display: none; /* cache les en-têtes */
+    }
+
+    tr {
+        background: #fff;
+        margin-bottom: 15px;
+        border-radius: 10px;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        padding: 12px;
+    }
+
+    td {
+        border: none;
+        display: flex;
+        justify-content: space-between;
+        padding: 8px 0;
+    }
+
+    td::before {
+        content: attr(data-label);
+        font-weight: 600;
+        color: #2c3e50;
+    }
+
+    /* GRAPHIQUES */
+    .charts {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+
+    .chart-box {
+        padding: 15px;
+        margin-bottom: 10px;
+        max-width: 80%;
+    }
+
+    /* TOTAL CRÉDITS */
+    .total-credits h2 {
+        font-size: 1.3rem;
+    }
+
+    #totalCredits {
+        font-size: 1.4rem;
+    }
+
+
+}
+
+
