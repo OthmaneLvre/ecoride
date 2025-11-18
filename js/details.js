@@ -439,8 +439,8 @@ if (participerBtn) {
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log("Réponse particpation :", data);
-
+        
+        // Cas 1 : non conecté 
         if (data.error === "not_logged_in") {
           feedback.textContent = "Veuillez vous connecter pour participer à ce covoiturage.";
           feedback.style.color = "var(--error)";

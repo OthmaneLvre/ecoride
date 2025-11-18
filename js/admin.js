@@ -326,12 +326,19 @@ document.addEventListener("DOMContentLoaded", () => {
 document.addEventListener("click", (e) => {
     if (e.target.id === "adminLogoutBtn") {
         
-        // suppression session localStorage
-        localStorage.removeItem("currentUserId");
-        localStorage.removeItem("currentUserName");
-        localStorage.removeItem("currentUserRoles");
+        // Déconnexion PHP 
+        fetch("php/logout.php")
+            .then(() => {
+                // suppression session localStorage
+                localStorage.removeItem("currentUserId");
+                localStorage.removeItem("currentUserName");
+                localStorage.removeItem("currentUserRoles");
 
-        // redirection vers la page de login
-        globalThis.location.href = "login.html";
+                // redirection vers la page de login
+                globalThis.location.href = "login.html";                
+            })
+            .catch(err => {
+                console.error("Erreur lors de la déconnexion :", err);
+            });
     }
 });

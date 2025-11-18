@@ -1,17 +1,26 @@
 <?php
 require_once 'mongo.php';
 
+use MongoDB\BSON\UTCDateTime;
+
 function addLog($type, $message, $details = []) {
     global $mongoDB;
 
-    $collection = $mongoDB->selectCollection('logs');
+    try {
+        // Sélection de la collection "logs"
+        $collection = $mongoDB->logs;
 
-    $log = [
-        "type"      => $type,
-        "message"   => $message,
-        "details"   => $details,
-        "date"      => new MongoDB\BSON\UTCDateTime()
-    ];
+        // Documents à insérer
+        $collection->insertOne([
+            "type"      => $type,
+            "message"   => $message,
+            "details"   => $details,
+            "date"      => new UTCDateTime()
+        ]);
 
-    $collection->insertOne($log);
+    } catch (Exception $e) {
+        error_log("Erreur MongoDB lors de addLog(): " . $e->getMessage());
+        echo "Erreur Mongo DB : " . $e->getMessage();
+    }
+
 }

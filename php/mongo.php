@@ -10,7 +10,7 @@ try {
     );
 
     // Base dédiée aux logs du projet EcoRide
-    $mongoDB = $client->selectDatabase('ecoride_logs');
+    $mongoDB = $client->ecoride_logs;
 
 } catch (Exception $e) {
     die("Erreur de connexion MonDB : " . $e->getMessage());

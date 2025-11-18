@@ -4,7 +4,7 @@ require_once 'log.php'; // MongoDB
 header('Content-Type: application/json; charset=utf-8');
 
 try {
-    // Récupération et nettoyage des données 
+    // Récupération et nettoyage des données
     $nom = trim($_POST['nom'] ?? '');
     $prenom = trim($_POST['prenom'] ?? '');
     $pseudo = trim($_POST['pseudo'] ?? '');
@@ -12,7 +12,7 @@ try {
     $password = trim($_POST['password'] ?? '');
     $confirm = trim($_POST['confirm_password'] ?? '');
 
-    // Vérification des champs 
+    // Vérification des champs
     if (empty($nom) || empty($prenom) || empty($pseudo) || empty($email) || empty($password) || empty($confirm)) {
        
         addLog("signup_failed", "Champs manquants lors de l'inscription", [
@@ -76,4 +76,5 @@ try {
     echo json_encode(["status" => "ok", "message" => "Inscription réussie ! Vous pouvez maintenant vous connecter."]);
 
 } catch (PDOException $e) {
-    echo json_encode(["error" => "Erreur serveur : " . $e->getMessage()]);}
+    echo json_encode(["error" => "Erreur serveur : " . $e->getMessage()]);
+}
