@@ -1,6 +1,17 @@
 // EcoRide - main.js
 // Gestion du header/footer, menu burger et redirection recherche
 
+/* Fonction formatage date */
+function formatDate(dateStr) {
+    const d = new Date(dateStr);
+    return d.toLocaleDateString("fr-FR");
+}
+
+/* Fonction formatage heure */
+function formatTime(timeStr) {
+    return timeStr.slice(0,5); 
+}
+
 // ==========================
 // 1️⃣ CHARGEMENT PARTIELS
 // ==========================
@@ -17,10 +28,40 @@ function loadHTML(id, file) {
       if (id === "header") {
         initBurgerMenu();
 
-        // Header bien injecté pour gérer la connexion 
-        initLoginSimulation();
+        // Vérifie le statut de connexion APRES injection du header
+        const userId = localStorage.getItem("currentUserId");
+        const userName = localStorage.getItem("currentUserName");
+
+        let storedRoles = localStorage.getItem("currentUserRoles");
+        let userRoles = [];
+
+        try {
+          if (storedRoles && storedRoles !== "undefined") {
+            userRoles = JSON.parse(storedRoles);
+          }
+
+        } catch (e) {
+          console.warn("Roles invalides -> reset", e);
+          userRoles = [];
+          localStorage.removeItem("currentUserRoles");
+        }
+
+        // Statut connecté
+        if (userId && userName) {
+          globalThis.isLoggedIn = true;   
+        } else {
+          globalThis.isLoggedIn = false;
+        }
+
+        globalThis.currentUserRoles = userRoles;
+
+        // Mise à jour de la nav selon l'état 
         updateNavLinks();
       }
+
+      // Pose les listeners (logout) une fois le header injecté 
+      initLogin();
+
     })
     .catch((error) => console.error(error));
 }
@@ -31,6 +72,7 @@ document.addEventListener("DOMContentLoaded", () => {
   loadHTML("footer", "partials/footer.html");
 });
 
+document.dispatchEvent(new Event("headerReady"));
 
 // ==========================
 // 2️⃣ MENU BURGER
@@ -127,116 +169,135 @@ function updateNavLinks() {
       register: document.getElementById("link-register-desktop"),
       account: document.getElementById("link-account-desktop"),
       logout: document.getElementById("link-logout-desktop"),
-      history : document.getElementById("link-history-desktop")
+      history : document.getElementById("link-history-desktop"),
+      employee: document.getElementById("link-employee-desktop"),
+      admin: document.getElementById("link-admin-desktop"),
     },
     {
       login: document.getElementById("link-login-mobile"),
       register: document.getElementById("link-register-mobile"),
       account: document.getElementById("link-account-mobile"),
       logout: document.getElementById("link-logout-mobile"),
-      history : document.getElementById("link-history-mobile")
+      history : document.getElementById("link-history-mobile"),
+      employee: document.getElementById("link-employee-mobile"),
+      admin: document.getElementById("link-admin-mobile"),
     }
   ];
+
+  const roles = globalThis.currentUserRoles || [];
 
   // Boucle sur les deux versions de la nav (desktop + mobile )
   for(const set of navSets) {
     if (!set.login || !set.register || !set.account || !set.logout) continue;
 
     if (isLoggedIn) {
+
+      //--- Visibilité classiques ----
       set.login.classList.add("hidden");
       set.register.classList.add("hidden");
       set.account.classList.remove("hidden");
       set.logout.classList.remove("hidden");
 
-    if (set.history) set.history.classList.remove("hidden")    
+      if (set.history) set.history.classList.remove("hidden");   
+
+      // --- Role employe 
+      if (set.employee) {
+        if (roles.includes("employe")) {
+          set.employee.classList.remove("hidden");
+        } else {
+          set.employee.classList.add("hidden")
+        }
+      }
+
+      // --- Role ADMIN 
+      if (set.admin) {
+        if (roles.includes("admin")) {
+          set.admin.classList.remove("hidden");
+        } else {
+          set.admin.classList.add("hidden")
+        }
+      }
+
     } else {
+      // Utilisateur déconnecté 
       set.login.classList.remove("hidden");
       set.register.classList.remove("hidden");
       set.account.classList.add("hidden");
       set.logout.classList.add("hidden");
 
       if (set.history) set.history.classList.add("hidden");
+      if (set.employee) set.employee.classList.add("hidden")
+      if (set.admin) set.admin.classList.add("hidden");
     }
   }
 }
 
 // --- GESTION CONNEXION / DECONNEXION ---
-function initLoginSimulation() {
+function initLogin() {
   const loginLinkDesktop = document.getElementById("link-login-desktop");
   const accountLinkDesktop = document.getElementById("link-account-desktop");
-  const logoutLinkDesktop = document.getElementById("link-logout-desktop");
-  const logoutLinkMobile = document.getElementById("link-logout-mobile");
+  const logoutButtons = document.querySelectorAll(".logout-btn")
 
   if (!loginLinkDesktop || !accountLinkDesktop) {
-    setTimeout(initLoginSimulation, 200);
+    setTimeout(initLogin, 200);
     return;
   }
 
-  // Connexion simulée 
-  if (loginLinkDesktop) {
-    loginLinkDesktop.addEventListener("click", (e) => {
-      e.preventDefault();
-      globalThis.isLoggedIn = true;
-      localStorage.setItem("isLoggedIn", "true");
-      updateNavLinks();
-      globalThis.location.href = "user-space.html"; // redirection vers espace utilisateur 
-    });
+  if (!logoutButtons.length) {
+    setTimeout(initLogin, 200);      
+    return;
   }
 
   // Déconnexion réelle 
-  const handleLogout = () => {
-    const confirmLogout = confirm("Voulez-vous vraiment vous déconnecter ?");
-    if (confirmLogout) {
+  const handleLogout = (e) => {
+    e.preventDefault();
+    if (!confirm("Voulez-vous vraiment vous déconnecter ?")) return;
+
+
+      // Etat et stockage réels 
       globalThis.isLoggedIn = false;
-      localStorage.removeItem("isLoggedIn");
-      localStorage.removeItem("userData");
-      localStorage.removeItem("userPhoto");
+      localStorage.removeItem("currentUserId");
+      localStorage.removeItem("currentUserName");
+      
+      // Mise à jour de la navigation
       updateNavLinks();
-      alert("Déconnexion réussie !");
+
+      // Redirection
       globalThis.location.href = "login.html"
-    }
   };
 
-  if (logoutLinkDesktop) {
-    logoutLinkDesktop.addEventListener("click", handleLogout);
+  // Attache le listener sur chaque bouton 
+  for(const btn of logoutButtons) {
+    btn.addEventListener("click", handleLogout);
   }
+}  
 
-  if (logoutLinkMobile) {
-    logoutLinkMobile.addEventListener("click", handleLogout);
-  }
-
-
-  // --- Restauration automatique de l’état ---
-  const savedLogin = localStorage.getItem("isLoggedIn");
-  if (savedLogin === "true") {
-    globalThis.isLoggedIn = true;
-    updateNavLinks();
-  }
-}
-
-
-// --- INITIALISATION ---
-// appel automatique quand la page est chargée
 document.addEventListener("DOMContentLoaded", updateNavLinks);
 
-// --- BOUTON DE SIMULATION DE CONNEXION --- 
-if (typeof toggleBtn !== "undefined" && toggleBtn) {
-  toggleBtn.addEventListener("click", () => {
-    // Inversion du bouton de connexion 
-    globalThis.isLoggedIn = !globalThis.isLoggedIn;
 
-    // Mise à jour visuelle de la nav 
-    updateNavLinks();
+// --- SYNCHRONISATION REELLE AVEC LOGIN.JS ---
+document.addEventListener("DOMContentLoaded", () => {
+  const userId = localStorage.getItem("currentUserId");
+  const userName = localStorage.getItem("currentUserName");
 
-    // Feedback utilisateur 
-    if (typeof feedback !== "undefined" && feedback) {
-      feedback.textContent = isLoggedIn
-        ? "✅ Vous êtes connecté (mode utilisateur)"
-        : "🚫 Vous êtes maintenant en mode visiteur";
-      feedback.style.color = isLoggedIn ? "var(--success)" : "var(--error)"; 
+  let storedRoles = localStorage.getItem("currentUserRoles");
+  let userRoles = [];
+
+  try {
+    if (storedRoles && storedRoles !== "undefined") {
+      userRoles = JSON.parse(storedRoles);
     }
+  } catch (e) {
+    console.warn("Roles invalides dans localStorage, reset", e);
+    userRoles = [];
+    localStorage.removeItem("currentUserRoles");
 
-    // Mise à jour du texte du bouton simulateur 
-    toggleBtn.textContent = isLoggedIn ? "Mode utilisateur" : "Mode visiteur";
-  });
-}
+  }  if (userId && userName) {
+    globalThis.isLoggedIn = true; // l'utilisateur est connecté
+  } else {
+    globalThis.isLoggedIn = false; // visiteur
+  }
+  globalThis.currentUserRoles = userRoles;
+
+  updateNavLinks(); // on met à jour la nav en conséquence
+});

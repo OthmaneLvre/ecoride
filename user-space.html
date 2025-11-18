@@ -35,7 +35,7 @@
         <section class="personal-info">
             <h2>Mes informations personnelles</h2>
 
-            <p>Crédit actuel : <span id="driver-credit">0</span> points</p>
+            <p>Crédit actuel : <span id="user-credit"></span> points</p>
 
             <div class="info-grid">
                 <!-- Photo -->
@@ -82,6 +82,16 @@
                     <label for="user-address">Adresse</label>
                     <input type="text" id="user-address" placeholder="Ex: 12 rue du Ventous, Céret">
                 </div> 
+
+                <!-- Email -->
+                <div class="form-group">
+                    <label for="user-email">Email :</label>
+                    <input
+                        type="email" 
+                        id="user-email" readonly
+                    >
+                    <small class="info-text">L'email ne peut pas être modifié depuis cet espace. Veuillez contacter le support.</small>
+                </div>
             </div>
         </section>
 
@@ -105,7 +115,7 @@
          </section>
 
          <!-- Formulaire chauffeur -->
-        <section class="driver-info hidden" id="driver-section">
+        <section class="driver-info" id="driver-section">
             <h2>Informations chauffeur</h2>
 
             <!-- Bloc véhicule -->
@@ -114,12 +124,59 @@
                 <div id="vehicle-list">
                     <!-- Les cartes véhicules ajoutées dynamiquement apparaitront ici -->
                 </div>
+
+                <!-- Bouton d'affichage du formulaire-->
                 <button id="add-vehicle-btn" class="btn-primary">+ Ajouter un véhicule</button>
+            
+                <!-- Formulaire d'ajout de véhicule -->
+                 <div id="add-vehicle-form" class="vehicle-form hidden">
+                    <h4>Ajouter un nouveau véhicule</h4>
+
+                    <form id="vehicleForm">
+                        <div class="form-group">
+                            <label for="brand">Marque</label>
+                            <select name="brand" id="brand" required>
+                                <option value="">-- Choisissez une marque</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="model">Modèle</label>
+                            <input type="text" id="model" name="model" placeholder="Ex : Clio" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="color">Couleur</label>
+                            <input type="text" id="color" name="color" placeholder="Ex : Bleu" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="plate">Immatriculation</label>
+                            <input type="text" id="plate" name="plate" placeholder="Ex : AB-123-CD" required>
+                        </div>
+
+                         <div class="form-group">
+                            <label for="plate">Date de première immatriculation</label>
+                            <input type="date" id="firstRegDate" name="firstRegDate" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="energy">Énergie</label>
+                            <input type="text" id="energy" name="energy" placeholder="Ex : Essence" required>
+                        </div>
+
+                        <div class="form-buttons">
+                            <button type="submit" class="btn-primary">Ajouter le véhicule</button>
+                            <button type="button" id="cancel-add" class="btn-secondary">Annuler</button>
+                        </div>
+                    </form>
+                 </div>
             </div>
 
              <!-- Bloc préférences -->
             <div class="preferences">
                 <h3>Mes préférences</h3>
+
                 <div class="preferences-default">
                     <label>
                         <input type="checkbox" id="smoker"> Accepte les fumeurs
@@ -132,6 +189,7 @@
             <!-- Bloc préférences personnalisées -->
             <div class="preferences-custom">
                 <h3>Préférences personnalisées</h3>
+
                 <div class="add-preference">
                     <input type="text" id="custom-preference" placeholder="Ex : Musique calme">
                     <button id="add-preference-btn" class="btn-primary">+</button>
@@ -140,6 +198,7 @@
                     <!-- Les préférences personnalisées ajoutées apparaîtront ici -->
                 </ul>
             </div>    
+            </div>
         </section>
 
           <!-- Bouton sauvegarde -->
@@ -235,6 +294,7 @@
         
         <section id="driver-trips" class="trips-section">
             <h2>Mes covoiturages</h2>
+            <div id="userTripsList"></div>
         </section>
 
         <section id="pending-trips" class="trips-section">

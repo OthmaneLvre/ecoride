@@ -1,11 +1,11 @@
 // EcoRide - details.js 
 // Page DETAILS D'UN COVOITURAGE 
 
-
-function generateStars(rating) {
+function generateStars(note) {
   let starsHTML = "";
-  const fullStars = Math.floor(rating);
-  const hasHalfStar = rating % 1 !== 0;
+  const fullStars = Math.floor(note);
+  const hasHalfStar = note % 1 !== 0;
+  const emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
 
   for (let i = 0; i < fullStars; i++) {
     starsHTML += `<img src="assets/icons/star-full.png" alt="étoile pleine" class="star-icon">`;
@@ -13,11 +13,52 @@ function generateStars(rating) {
   if (hasHalfStar) {
     starsHTML += `<img src="assets/icons/star-half.png" alt="étoile demi" class="star-icon">`;
   }
-  const emptyStars = 5 - Math.ceil(rating);
   for (let i = 0; i < emptyStars; i++) {
     starsHTML += `<img src="assets/icons/star-empty.png" alt="étoile vide" class="star-icon">`;
   }
+
   return starsHTML;
+}
+
+/* --- Mise à jour de la note moyenne du chauffeur --- */
+function updateAverageRating(moyenne) {
+  const ratingBox = document.querySelector(".driver-rating");
+
+  if (!ratingBox) return;
+
+  if (!moyenne) {
+    ratingBox.innerHTML = `<p>Aucune note</p>`;
+    return;
+  }
+
+  ratingBox.innerHTML = generateStars(moyenne);
+}
+
+
+
+// ---- Convertit les préférences "brutes" du trajet en texte lisible ----
+function extrairePreferencesTrajet(trip) {
+    let prefs = [];
+
+    // Fumeur
+    if (trip.fumeur == 1) prefs.push("Fumeur");
+    if (trip.fumeur == 0) prefs.push("Non fumeur");
+
+    // Animaux
+    if (trip.animal == 1) prefs.push("Accepte les animaux");
+    if (trip.animal == 0) prefs.push("N'accepte pas les animaux");
+
+    // Préférences personnalisées
+    if (trip.preferences_personnalisees) {
+        try {
+            const custom = JSON.parse(trip.preferences_personnalisees);
+            prefs = prefs.concat(custom);
+        } catch (e) {
+            console.warn("Erreur JSON préférences perso :", e);
+        }
+    }
+
+    return prefs;
 }
 
 // Calcul de la durée estimée
@@ -40,6 +81,10 @@ function calculerDuree(departureTime, arrivalTime) {
   return `${heures}h${minutes.toString().padStart(2, "0")}`;
 }
 
+function restaurerReservation(trajetID) {
+    console.log("Réservation restaurée pour le trajet ID :", trajetID);
+}
+
 // ---- SCRIPT PRINCIPAL ---- 
 document.addEventListener("DOMContentLoaded",() => {
     // Récupération de l'ID du trajet dans l'URL 
@@ -54,26 +99,58 @@ document.addEventListener("DOMContentLoaded",() => {
     }
 
     // Chargement du fichier JSON contenant les covoiturages 
-    fetch("data/rides.json")
+    fetch(`php/get_trips_details.php?id=${trajetID}`)
         .then((response) => {
-            if (!response.ok) throw new Error("Impossible de charger les trajets");
+            if (!response.ok) throw new Error("Erreur de chargement depuis la base");
             return response.json();
         })
-        .then((data) => {
-            // Recherche du trajet correspondant à l'ID récupéré 
-            const trajet = data.find((item) => item.id == trajetID);
+        .then((trajet) => {
+          if (trajet.error) {
+            document.querySelector("main").innerHTML = `<p> Erreur : ${trajet.error}</p>`;
+            return;
+          }
 
-            if (!trajet) {
-                console.error("Trajet introuvable pour l'ID :", trajetID);
-                document.querySelector("main").innerHTML = "<p>Trajet introuvable.<p>";
-                return;
-            }
+          if (trajet.message) {
+            document.querySelector("main").innerHTML = `<p> ${trajet.message}</p>`;
+            return;
+          }
 
-            // Injection des données dans la page 
-            afficherDetailsTrajet(trajet);
-            afficherPreferences(trajet.preferences);
-            afficherAvis(trajet.reviews);
-            restaurerReservation(trajetID);
+          console.log("Détails du trajet récupérés :", trajet);
+
+          // --- Conversion pour compatibilité avec tes fonctions existantes ---
+          const dataFormat = {
+            id: trajet.id_covoiturage,
+            driverName: `${trajet.chauffeur_prenom} ${trajet.chauffeur_nom}`,
+            departureCity: trajet.lieu_depart,
+            arrivalCity: trajet.lieu_arrivee,
+            departureDate: trajet.date_depart,
+            arrivalDate: trajet.date_arrivee,
+            departureTime: trajet.heure_depart,
+            arrivalTime: trajet.heure_arrivee,
+            seats: trajet.nb_places,
+            price: trajet.prix_personne + " €",
+            rating: 0,
+            photo: trajet.chauffeur_photo || "assets/images/default-user.png",
+            carBrand: trajet.marque || "Non renseignée",
+            carModel: trajet.modele || "—",
+            carColor: trajet.couleur || "—",
+            energy: trajet.energie || trajet.energy || "—",
+            eco: true,
+            preferences: [],
+            reviews: []
+          };
+
+            // Appel des fonctions existantes  
+            afficherDetailsTrajet(dataFormat);
+
+            const preferencias = extrairePreferencesTrajet(trajet);
+            afficherPreferences(preferencias);
+            
+            // Chargement des avis du chauffeur 
+            const chauffeurID = trajet.chauffeur_id;
+            console.log("ID chauffeur :", trajet.chauffeur_id);
+
+            loadDriverNotice(chauffeurID);
         })
         .catch((error) => {
             console.error("Error :", error);
@@ -86,16 +163,40 @@ document.addEventListener("DOMContentLoaded",() => {
 
 function afficherDetailsTrajet(trajet) {
     const container = document.getElementById("ride-info");
-    const ecoIcon = trajet.eco
-        ?"assets/icons/ecologic.png"
-        : "assets/icons/fuel.png";
 
-  // 🚗 Gestion de l’énergie utilisée
-    const energyLabel = trajet.energy
-      ? trajet.energy
-      : "Type d'énergie non renseigné";
+    // Vérification si c'est une voiture électrique ou non 
+    let isElectric = false;
+
+    if (trajet.energy) {
+      const energy = trajet.energy.toLowerCase();
+      if (energy.includes("elect")) {
+        isElectric = true;
+      }
+    }  
+
+    // Gestion de l'énergie utilisée 
+    let energyLabel = "Type d'énergie non renseigné";
+    let energyClass = "";
+    
+    if (trajet.energy) {
+        const energy = trajet.energy.toLowerCase();
+        if (energy.includes("élect")) {
+            energyLabel = trajet.energy;
+            energyClass = "electric";
+        } else if (energy.includes("essence") || energy.includes("diesel")) {
+            energyLabel = trajet.energy;
+            energyClass = "fossil";
+        } else {
+          energyLabel = trajet.energy
+        }
+    }
 
     const dureeEstimee = calculerDuree(trajet.departureTime, trajet.arrivalTime);  
+
+    // Icone selon le type d'energie 
+    const ecoIcon = isElectric
+      ? "assets/icons/ecologic.png"
+      : "assets/icons/fuel.png";
 
     // Création du contenu HTML à partir des données JSON 
     container.innerHTML = `
@@ -115,13 +216,13 @@ function afficherDetailsTrajet(trajet) {
         <div class="details-row two-cols">
           <div>
             <p><strong>Départ :</strong> ${trajet.departureCity}</p>
-            <p><strong>Date :</strong> ${trajet.departureDate}</p>
-            <p><strong>Heure :</strong> ${trajet.departureTime}</p>
+            <p><strong>Date :</strong> ${formatDate(trajet.departureDate)}</p>
+            <p><strong>Heure :</strong> ${formatTime(trajet.departureTime)}</p>
           </div>
           <div>
           <p><strong>Arrivée :</strong> ${trajet.arrivalCity}</p>
-          <p><strong>Date :</strong> ${trajet.arrivalDate}</p>
-          <p><strong>Heure :</strong> ${trajet.arrivalTime}</p>
+          <p><strong>Date :</strong> ${formatDate(trajet.arrivalDate)}</p>
+          <p><strong>Heure :</strong> ${formatTime(trajet.arrivalTime)}</p>
         </div>
       </div>
 
@@ -135,8 +236,13 @@ function afficherDetailsTrajet(trajet) {
         <h4>Véhicule</h4>
         </div>
 
-        <p class="vehicle-type"><strong>Marque :</strong> ${trajet.carBrand} - <strong>Modèle :</strong> ${trajet.carModel} - <strong>Énergie :</strong> ${trajet.energy}</p>
-        </div>    
+        <p class="vehicle-type">
+          <strong>Marque :</strong> ${trajet.carBrand} -
+          <strong>Modèle :</strong> ${trajet.carModel} - 
+          <strong>Couleur :</strong> ${trajet.carColor} - 
+          <strong>Énergie :</strong> <span class="energy-text ${energyClass}">${energyLabel}</span>
+        </p>  
+      </div>    
 
       <div class="details-row center-row">
         <p><strong>Prix / place :</strong></p><p>${trajet.price}</p>
@@ -146,10 +252,17 @@ function afficherDetailsTrajet(trajet) {
           <p><strong>Places restantes :</strong></p><p>${trajet.seats}</p>
       </div>
  
-      <div class="details-row eco-section center-row">
-        <p><strong>Mention écologique :</strong></p>
-        <img src="${ecoIcon}" alt="${trajet.eco}" class="eco-icon">
-      </div>   
+      ${
+        isElectric
+          ? `
+        <div class="details-row eco-section center-row">
+          <p><strong>Mention écologique :</strong></p>
+          <img src="${ecoIcon}" alt="Véhicule écologique" class="eco-icon">
+        </div>   
+      `
+          : ""
+      }
+    </div>      
   `;
 }
 
@@ -201,11 +314,11 @@ const iconMap = {
 }
 
 // ---- FONCTION -> Afficher les avis du conducteur 
-function afficherAvis(reviews) {
+function showReview(reviews) {
   const reviewsSection = document.getElementById("reviews");
 
   if (!reviews || reviews.length === 0) {
-    container.innerHTML += `
+    reviewsSection.innerHTML += `
       <p>Aucun avis pour le moment.</p>
     `;
     return;
@@ -215,25 +328,25 @@ function afficherAvis(reviews) {
   const list = document.createElement("div");
   list.classList.add("reviews-list");
 
-  reviews.forEach((avis) => {
+  for(const review of reviews) {
     const card = document.createElement("div");
     card.classList.add("review-card");
 
     // Colonne 1 : pseudo
     const pseudo = document.createElement("p");
     pseudo.classList.add("pseudo");
-    pseudo.textContent = avis.auteur;
+    pseudo.textContent = review.auteur;
 
     // Colonne 2 : étoiles
     const stars = document.createElement("div");
     stars.classList.add("stars");
-    const fullStars = Math.floor(avis.note);
-    const hasHalf = avis.note % 1 !== 0;
+    const fullStars = Math.floor(review.note);
+    const hasHalfStar = review.note % 1 !== 0;
 
     for (let i = 0; i < fullStars; i++) {
       stars.innerHTML += `<img src="assets/icons/star-full.png" alt="★">`;
     }
-    if (hasHalf) {
+    if (hasHalfStar) {
       stars.innerHTML += `<img src="assets/icons/star-half.png" alt="☆">`;
     }
     for (let i = stars.children.length; i < 5; i++) {
@@ -243,14 +356,37 @@ function afficherAvis(reviews) {
     // Colonne 3 : commentaire
     const comment = document.createElement("p");
     comment.classList.add("comment");
-    comment.textContent = avis.commentaire;
+    comment.textContent = review.commentaire;
 
     // Injection dans la grille
     card.append(pseudo, stars, comment);
     list.appendChild(card);
-  });
+  };
 
   reviewsSection.appendChild(list);
+}
+
+/* Chargement des Avis + moyenne chauffeur */
+
+async function loadDriverNotice(id_chauffeur) {
+  try {
+    const response = await fetch("php/get_reviews.php?id_chauffeur=" + id_chauffeur);
+    const result = await response.json();
+
+    console.log("Avis du chauffeur :", result);
+
+    const moyenne = result.moyenne;
+    const avis = result.avis;
+
+    // Mettre à jour la note moyenne 
+    updateAverageRating(moyenne);
+
+    // Afficher les avis 
+    showReview(avis);
+
+  } catch (err) {
+    console.error("Erreur lors du chargement des avis :", err);
+  }
 }
 
 // --- BOUTON RETOUR A LA LISTE --- 
@@ -261,106 +397,76 @@ document.addEventListener("DOMContentLoaded", () => {
       // Si recherche enregistrée : 
       const lastSearchURL = localStorage.getItem("lastSearchURL");
       if (lastSearchURL) {
-        window.location.href = lastSearchURL;
+        globalThis.location.href = lastSearchURL;
       } else { 
         // On renvoie à la page listings 
-        window.location.href = "listings.html"; 
+        globalThis.location.href = "listings.html"; 
       }
     });
   }
 });
 
-// --- RESTAURATION DE L'ÉTAT DE RÉSERVATION ---
-function restaurerReservation(trajetID) {
-  const saved = localStorage.getItem(`reservation_${trajetID}`);
-  if (!saved) return;
-
-  const { reserved, placesRestantes } = JSON.parse(saved);
-
-  if (reserved) {
-    const btn = document.getElementById("participate-btn");
-    const feedback = document.getElementById("feedback-msg");
-    const placeInfo = document.querySelector(".places-disponibles");
-
-    if (btn) {
-      btn.textContent = "Place réservée";
-      btn.disabled = true;
-    }
-
-    if (placeInfo) placeInfo.textContent = `Places disponibles : ${placesRestantes}`;
-
-    feedback.textContent = "✅ Vous participez déjà à ce covoiturage";
-    feedback.style.color = "var(--success)";
-  }
-}
-
-
-
-// Simulation de l'état utilisateur
-let userCredits = 2;          // crédits restants
-let placesDisponibles = 3;    // places sur le trajet
-const creditCost = 1;         // coût en crédit d'une participation
-
-// Sélecteurs
-const btn = document.getElementById("participate-btn");
+// --- PARTICPATION REELLE VIA LA BASE DE DONNEES ---
+const participerBtn = document.getElementById("participate-btn");
 const feedback = document.getElementById("feedback-msg");
 
-if (typeof isLoggedIn === "undefined") {
-  window.isLoggedIn = false;
-}
+if (participerBtn) {
+  participerBtn.addEventListener("click", () => {
+    const urlParams = new URLSearchParams(globalThis.location.search);
+    const trajetID = urlParams.get("id");
 
-btn.addEventListener("click", () => {
-  if (!isLoggedIn) {
-    feedback.textContent = "Veuillez vous connecter ou créer un compte pour participer.";
-    feedback.style.color = "var(--error)";
-    return;
-  }
-
-  if (userCredits < creditCost) {
-    feedback.textContent = "Crédits insuffisants pour participer à ce covoiturage.";
-    feedback.style.color = "var(--error)";
-    return;
-  }
-
-  if (placesDisponibles <= 0) {
-    feedback.textContent = "Ce covoiturage est complet.";
-    feedback.style.color = "var(--error)";
-    return;
-  }
-
-  // Étape de double confirmation
-  const confirmation = confirm(
-    `Participer à ce covoiturage vous coûtera ${creditCost} crédit(s). Confirmer la réservation ?`
-  );
-
-  if (confirmation) {
-    const doubleConfirm = confirm("Souhaitez-vous définitivement valider votre participation ?");
-    if (doubleConfirm) {
-      userCredits -= creditCost;
-      placesDisponibles--;
-      feedback.textContent = "Participation confirmée ✅ Votre place est réservée.";
-      feedback.style.color = "var(--success)";
-      btn.textContent = "Place réservée";
-      btn.disabled = true;
-
-      // Sauvegarde locale de la réservation 
-      const urlParams = new URLSearchParams(window.location.search);
-      const trajetID = urlParams.get("id");
-
-      localStorage.setItem(`reservation_${trajetID}`, JSON.stringify({
-        reserved: true,
-        placesRestantes: placesDisponibles
-      }));
-
-      // Mise à jour visuelle (exemple)
-      const placeInfo = document.querySelector(".places-disponibles");
-      if (placeInfo) placeInfo.textContent = `Places disponibles : ${placesDisponibles}`;
-    } else {
-      feedback.textContent = "Participation annulée.";
-      feedback.style.color = "var(--error)";
+    if (!trajetID) {
+      feedback.textContent = "ID du trajet introuvable.";
+      feedback.style.error = "var(--error)";
+      return;
     }
-  } else {
-    feedback.textContent = "Réservation non confirmée.";
-    feedback.style.color = "var(--error)";
-  }
-});
+
+    const userId =localStorage.getItem("currentUserId");
+
+    if (!userId) {
+      feedback.textContent = "Vous devez être connecté pour participer à un covoiturage."
+      feedback.style.color = "var(--error)";
+      return;
+    }
+
+    // Appel vers le back PHP 
+    fetch("php/join_trip.php", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+      body: `trip_id=${encodeURIComponent(trajetID)}`
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log("Réponse particpation :", data);
+
+        if (data.error === "not_logged_in") {
+          feedback.textContent = "Veuillez vous connecter pour participer à ce covoiturage.";
+          feedback.style.color = "var(--error)";
+          return;
+        }
+
+        if (data.status === "ok") {
+          feedback.textContent = "Participation confirmée ! Votre place est réservée.";
+          feedback.style.color = "var(--success)";
+          participerBtn.textContent = "Place réservée";
+          participerBtn.disabled = true;
+          return;
+        }
+
+        if (data.error) {
+          feedback.textContent = "Erreur serveur : " + data.error;
+          feedback.style.color = "var(--error)";
+        } else {
+          feedback.textContent = "Une erreur est survenue.";
+          feedback.style.color = "var(--error)";
+        }
+      })
+      .catch((err) => {
+        console.error("Erreur fetch participation :", err);
+        feedback.textContent = "Impossible d'enregistrer votre participation pour ce covoiturage.";
+        feedback.style.color = "var(--error)";
+      });
+  });
+}

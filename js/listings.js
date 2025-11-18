@@ -17,12 +17,24 @@ function calculerDuree(departureTime, arrivalTime) {
   return +(diff / 60).toFixed(1); // heures décimales
 }
 
-// --- Conversion JJ/MM/AAAA -> Date JS ---
 function parseFrenchDate(dateStr) {
-  const [day, month, year] = dateStr.split("/").map(Number);
-  return new Date(year, month - 1, day);
-}
+  if (!dateStr) return new Date();
 
+  // Si la date contient des "/", on est en format JJ/MM/AAAA
+  if (dateStr.includes("/")) {
+    const [day, month, year] = dateStr.split("/").map(Number);
+    return new Date(year, month - 1, day);
+  }
+
+  // Si la date contient des "-", on est en format SQL AAAA-MM-JJ
+  if (dateStr.includes("-")) {
+    const [year, month, day] = dateStr.split("-").map(Number);
+    return new Date(year, month - 1, day);
+  }
+
+  // Par défaut, on renvoie la date actuelle
+  return new Date();
+}
 // --- Format JJ/MM/AAAA ---
 function formatDate(date) {
   const day = String(date.getDate()).padStart(2, "0");
@@ -33,14 +45,24 @@ function formatDate(date) {
 
 // --- Chercher le prochain trajet similaire ---
 function findNextAvailableRideForRoute(rides, from, to, requestedDate) {
+
+  // Normaliser les villes 
+  const fFrom = from.trim().toLowerCase();
+  const fTo = to.trim().toLowerCase();
+
+  // Normaliser la date rechechée à minuit 
+  const req = new Date(requestedDate);
+  req.setHours(0, 0, 0, 0);
+
   const candidates = rides
     .filter((r) => {
       const rideFrom = r.departureCity.trim().toLowerCase();
       const rideTo = r.arrivalCity.trim().toLowerCase();
+
       return (
-        rideFrom === from &&
-        rideTo === to &&
-        r.parsedDate > requestedDate &&
+        rideFrom === fFrom &&
+        rideTo === fTo &&
+        r.parsedDate >= req &&
         r.seats > 0
       );
     })
@@ -135,90 +157,127 @@ if (from && to && date) {
     filterSection.classList.remove("show");
 }  
 
-  // --- Charger les données depuis rides.json ---
-  fetch("data/rides.json")
+  // --- Charger les données depuis la base (get_trips.php) avec filtres URL  ---
+  const queryParams = new URLSearchParams({
+    from: from,
+    to: to,
+    date: date
+  }).toString();
+  
+  fetch(`php/get_trips.php?${queryParams}`)
     .then((response) => {
-      if (!response.ok) throw new Error("Erreur de chargement du fichier JSON");
+      if (!response.ok) throw new Error("Erreur de chargement depuis la base");
       return response.json();
     })
     .then((rides) => {
-      // --- Conversion des dates FR en objets Date valides + ajout auto de la durée ---
-      const formattedRides = rides.map((ride) => ({
-        ...ride,
-        parsedDate: parseFrenchDate(ride.departureDate, ride.arrivalDate), // convertit en Date fr
-        duration: calculerDuree(ride.departureTime, ride.arrivalTime), // ajout de la durée
-      }));
+      console.log("Données reçues depuis PHP :", rides);
 
-      trajets = formattedRides;
-
-    // --- Filtrage strict ---
-    const filteredRides = formattedRides.filter((ride) => {
-        const rideFrom = ride.departureCity.trim().toLowerCase();
-        const rideTo = ride.arrivalCity.trim().toLowerCase();
-
-        // Conversion manuelle de la date URL au format JJ/MM/AAAA
-        const [year, month, day] = date.split("-");
-        const requestedDateStr = `${day}/${month}/${year}`.trim();
-
-        return (
-            rideFrom === from.toLowerCase() &&
-            rideTo === to.toLowerCase() &&
-            ride.departureDate.trim() === requestedDateStr &&
-            ride.seats > 0
-        );
-    });
-
-    // Stock les résultats trouvés dans la variable globale 
-    trajets = filteredRides
-
-
-      // --- Cas 1 : trajets trouvés ---
-      if (filteredRides.length > 0) {
-        renderRides(filteredRides, resultsContainer);
+      if (!Array.isArray(rides)) {
+        console.warn("Format inattendu :", rides);
+        resultsContainer.innerHTML = `
+          <div class="no-results">
+            <img src="assets/icons/calendar.png" alt="Aucun trajet" class="empty-icon">
+            <h3>${rides.message || "Aucun trajet trouvé"}</h3>
+          </div>`;
         return;
       }
 
-// --- Cas 2 : aucun trajet trouvé à la date exacte ---
-const nextRide = findNextAvailableRideForRoute(formattedRides, from, to, new Date(date));
-if (nextRide) {
-  // Message d'information clair
-  resultsContainer.innerHTML = `
-    <div class="no-results">
-      <img src="assets/icons/calendar.png" alt="Aucun trajet" class="empty-icon">
-      <h3>Aucun trajet disponible le ${formatDate(new Date(date))}</h3>
-      <p class="next-ride-message">
-        Le plus proche pour cette ligne est disponible le 
-        <strong>${formatDate(nextRide.parsedDate)}</strong> 
-        à <strong>${nextRide.departureTime}</strong>.
-      </p>
-    </div>
-  `;
+      // Adaptation des champs SQL -> strucutre JS attendue 
+      const formattedRides = rides.map((r) => ({
+          id: r.id_covoiturage,
+          departureCity: r.lieu_depart,
+          arrivalCity: r.lieu_arrivee,
+          departureDate: r.date_depart,
+          arrivalDate: r.date_arrivee,
+          departureTime: r.heure_depart,
+          arrivalTime: r.heure_arrivee,
+          seats: r.nb_places,
+          price: r.prix_personne + " €",
+          eco: false, // par défaut 
+          driverName: `${r.chauffeur_nom} ${r.chauffeur_prenom}`,
+          photo: "assets/images/default-user.png", // image par défaut 
+          parsedDate: parseFrenchDate(r.date_depart),
+          duration: calculerDuree(r.heure_depart, r.heure_arrivee),
+      }));
 
-  // Stockage du trajet plus proche pour filtres 
-  trajets = [nextRide];
+      trajets = formattedRides;
+      console.log("Trajets filtrés par SQL :", trajets);
 
-    // Ajout du trajet proposé en dessous
-    const wrapper = document.createElement("div");
-    wrapper.classList.add("next-ride-wrapper");
-    resultsContainer.appendChild(wrapper);
-    renderRides([nextRide], wrapper);
-    } else {
-    // --- Cas 3 : aucun trajet du tout 
-    resultsContainer.innerHTML = `
+      // 1. Récupération de la date recherchée telle qu'elle vient de l'URL
+      const requestedDate = date;
+
+      // 2. Trajets excacts sur cette date
+      const exactRides = formattedRides.filter(r => {
+        const rideFrom = r.departureCity.trim().toLowerCase();
+        const rideTo = r.arrivalCity.trim().toLowerCase();
+
+        return (
+          rideFrom === from &&
+          rideTo === to &&
+          r.departureDate === requestedDate
+        );
+      });
+
+     // --- Cas 1 : trajets exacts trouvés ---  
+    if (exactRides.length > 0) {
+      renderRides(exactRides, resultsContainer);
+      return;
+    }  
+
+    // 3: Tous les trajets FUTURS sur cette ligne 
+    const futureRides = formattedRides.filter(r => {
+      const rideFrom = r.departureCity.trim().toLowerCase();
+      const rideTo = r.arrivalCity.trim().toLowerCase();
+
+      return (
+        rideFrom === from &&
+        rideTo === to &&
+        r.departureDate > requestedDate &&
+        r.seats > 0
+      );
+    });
+
+    // --- Cas 2 : aucun trajet du tout
+    if (futureRides.length === 0) {
+      resultsContainer.innerHTML = `
         <div class="no-results">
         <img src="assets/icons/calendar.png" alt="Aucun trajet" class="empty-icon">
         <h3>Aucun trajet disponible pour cette recherche</h3>
         <p>Revenez plus tard pour découvrir de nouveaux trajets.</p>
         </div>
     `;
+    return;
     }
-})
-.catch((error) => {
-  console.error("Erreur :", error);
-  resultsContainer.innerHTML = "<p>Impossible de charger les trajets.</p>";
-});
+
+    // 4. Recherche de la DATE lap lus proche parmi les futures
+    const nextDateStr = futureRides.reduce(
+      (min, r) => r.departureDate < min ? r.departureDate : min,
+      futureRides[0].departureDate
+    );
 
 
+    // --- Cas 3 : Afficher message + trajet à la date la plus proche ---
+      // Message d'information clair
+      resultsContainer.innerHTML = `
+        <div class="no-results">
+          <div class="nearest-info">
+            <img src="assets/icons/calendar.png" alt="Aucun trajet" class="empty-icon">
+            <h3>Aucun trajet trouvé pour cette date.</h3>
+
+          <p>
+            Les trajets les plus proches sont disponible le 
+            <strong>${formatDate(parseFrenchDate(nextDateStr))}</strong>.
+            <br>Merci de refaire une recherche.
+          </p>
+          </div>
+        </div>
+
+      `;
+
+  })
+  .catch((err) => {
+    console.error("Erreur :", err);
+  });  
 
 // --- Affichage des trajets ---
 function renderRides(rides, container) {
@@ -260,10 +319,10 @@ if (detailBtn) {
   detailBtn.addEventListener("click", () => {
 
     // Sauvegarde de l'URL actuelle de la page listings 
-    localStorage.setItem("lastSearchURL", window.location.href);
+    localStorage.setItem("lastSearchURL", globalThis.location.href);
 
     // Redirection vers page details du trajet cliqué 
-    window.location.href = `details.html?id=${ride.id}`;
+    globalThis.location.href = `details.html?id=${ride.id}`;
   });
 }
 
@@ -329,8 +388,8 @@ for (const trajet of trajetsArray) {
   const detailBtn = card.querySelector(".btn-detail");
   if (detailBtn) {
     detailBtn.addEventListener("click", () => {
-      localStorage.setItem("lastSearchURL", window.location.href);
-      window.location.href = `details.html?id=${trajet.id}`;
+      localStorage.setItem("lastSearchURL", globalThis.location.href);
+      globalThis.location.href = `details.html?id=${trajet.id}`;
     });
   }
 
@@ -348,7 +407,8 @@ function filtrerTrajets() {
   const maxPrice = Number.parseFloat(priceFilter.value);
   const maxDuration = Number.parseFloat(durationFilter.value);
   const ratingSelected = document.querySelector("#filter-rating .select-selected span");
-  const minRating = Number.parseFloat(ratingSelected?.dataset?.value || 0);
+  const value = ratingSelected.dataset.value;
+  const minRating = value === "" ? 0 : Number(value);
 
   const trajetsFiltres = trajets.filter((trajet) => {
     const priceValue = parsePrice(trajet.price);
@@ -416,9 +476,15 @@ selected.addEventListener("click", () => {
 // Gérer le clic sur une option
 for (const option of optionsContainer.querySelectorAll("div")) {
   option.addEventListener("click", () => {
-    selected.querySelector("span").innerHTML = option.innerHTML; // copie visuelle
-    selected.querySelector("span").dataset.value = option.dataset.value; 
-    selected.dataset.value = option.dataset.value; // stocke la valeur
+    const value = option.dataset.value;
+    // Texte affiché
+    if (value === "") {
+      selected.querySelector("span").innerHTML = "Toutes";
+    } else {  
+      selected.querySelector("span").innerHTML = option.innerHTML; 
+    }  
+    selected.querySelector("span").dataset.value = value; 
+
     customSelect.classList.remove("active");
   });
 }
@@ -430,23 +496,28 @@ document.addEventListener("click", (e) => {
   }
 });
 
-// === Restauration des filtres après retour à la liste ===
-window.addEventListener("load", () => {
-  const savedFilters = JSON.parse(localStorage.getItem("activeFilters"));
-  if (!savedFilters) return;
+  // === Restauration des filtres après retour à la liste ===
+  window.addEventListener("load", () => {
+    const savedFilters = JSON.parse(localStorage.getItem("activeFilters"));
+    if (!savedFilters) return;
 
-  // On restaure les valeurs dans les champs
-  ecoFilter.checked = savedFilters.eco || false;
-  priceFilter.value = savedFilters.price || "";
-  durationFilter.value = savedFilters.duration || "";
+    // On restaure les valeurs dans les champs
+    ecoFilter.checked = savedFilters.eco || false;
+    priceFilter.value = savedFilters.price || "";
+    durationFilter.value = savedFilters.duration || "";
 
-  const ratingSpan = document.querySelector("#filter-rating .select-selected span");
-  if (ratingSpan && savedFilters.rating) {
-    ratingSpan.innerHTML = `${savedFilters.rating} ★`;
-    ratingSpan.dataset.value = savedFilters.rating;
-  }
+    const ratingSpan = document.querySelector("#filter-rating .select-selected span");
+      if (ratingSpan) {
+        if (savedFilters.rating === "" || savedFilters.rating === undefined) {
+          ratingSpan.innerHTML = "Toutes";
+          ratingSpan.dataset.value = "";
+        } else {
+          ratingSpan.innerHTML = savedFilters.rating + " ★";
+          ratingSpan.dataset.value = savedFilters.rating;
+        }
+      }    
 
-  // Appliquer les filtres 
-    filtrerTrajets();
-});
+    // Appliquer les filtres 
+      filtrerTrajets();
+  });
 });

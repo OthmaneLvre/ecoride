@@ -29,6 +29,8 @@ body.details-page {
 
 #preferences.card {
     align-self: center;
+    width: 340px;
+    max-width: 100%;
 }
 
 /* Trajet */
@@ -47,14 +49,10 @@ body.details-page {
     flex: 1.3;
 }
 
-#preferences.card {
-  width: 340px;
-  max-width: 100%;
-}
-
 /* Avis conducteur */
 .review-card {
   margin-bottom: 0.8rem;
+  display: contents; /* les éléments internes s’insèrent directement dans la grille */
 }
 
 /* Style des cartes */ 
@@ -197,6 +195,19 @@ body.details-page {
   height: 24px;
 }
 
+.energy-text {
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+.energy-text.electric {
+  color: #2e8b57; /* vert */
+}
+
+.energy-text.fossil {
+  color: #b85c00; /* brun/orange pour essence/diesel */
+}
+
 /* Centrage des blocs spécifiques */
 .center-row {
   display: flex;
@@ -307,11 +318,6 @@ body.details-page {
   left: 40%;
 }
 
-/* Chaque avis = 3 cellules consécutives */
-.review-card {
-  display: contents; /* les éléments internes s’insèrent directement dans la grille */
-}
-
 .review-card .pseudo {
   font-weight: 600;
   font-family: var(--font-secondary);
@@ -355,12 +361,6 @@ body.details-page {
 }
 
 /* --- BOUTON RETOUR --- */
-
-.cta-buttons {
-  text-align: center;
-  margin-top: 0.5rem;
-  margin-bottom: 10px;
-}
 
 .btn-secondary {
   cursor: pointer;

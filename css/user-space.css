@@ -218,6 +218,7 @@
   cursor: not-allowed;
 }
 
+
 /* ---- Préférences ---- */
 .preferences {
   background: var(text-light);
@@ -326,6 +327,7 @@
 
 .user-space .btn-primary {
   margin-bottom: 24px;
+  margin-top: 24px;
 }
 
 /* ---- SECTION - SAISIR UN NOUVEAU VOYAGE ---- */ 
@@ -395,37 +397,99 @@
 
 /* --- MES COVOITURAGES (Chauffeur) --- */ 
 
-.btn-start-trip,
-.btn-stop-trip {
-  display: inline-block;
-  padding: 10px 18px;
+.ride-card {
+  background: var(--card-background);
+  border: 1px solid var(--secondary);
+  border-radius: 10px;
+  padding: 20px;
+  margin-bottom: 25px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+
+.ride-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.ride-header h3 {
+  margin: 0;
+  font-size: 1.2rem;
+  color: var(--secondary);
+}
+
+.user-role-trip {
+  background-color: var(--text-light);
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  color: var(--text-dark);
+  border: 1px solid var(--secondary);
+}
+
+.status.upcoming {
+  color: var(--secondary);
+}
+
+.status.ongoing {
+  color: var(--primary);
+}
+
+.status.ended {
+  color: #555;
+}
+
+.status.canceled {
+  color: var(--error);
+}
+
+.ride-info p {
+  margin: 4px 0;
+  font-size: 0.95rem;
+}
+
+.ride-actions {
+  margin-top: 15px;
+}
+
+.ride-actions button {
+  padding: 8px 14px;
   border: none;
-  border-radius: 8px;
-  color: var(text-light);
-  font-weight: 600;
+  border-radius: 6px;
+  margin-right: 10px;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  font-size: 0.9rem;
 }
 
-.btn-start-trip {
-  background-color: var(--primary);
+/* Boutons */ 
+
+
+.btn-start {
+    background: var(--primary);
+    color: var(--text-light);
 }
 
-.btn-start-trip:hover {
-  background-color: var(--secondary);
+.btn-start:hover {
+    background: var(--secondary);
 }
 
-.btn-stop-trip {
-  background-color: #fd7e14;
+.btn-end {
+    background: #006db3;
+    color: var(--text-light);
 }
 
-.btn-stop-trip:hover {
-  background-color: #e36a05;
+.btn-end:hover {
+    background: #004f80;
 }
 
-.ride-status.ended {
-  color:  #6c757d;
-  font-style: italic;
+.btn-cancel {
+    background: #d9534f;
+    color: var(--text-light);
+}
+
+.btn-cancel:hover {
+    background: var(--error);
 }
 
 /* --- Covoiturages à valider --- */

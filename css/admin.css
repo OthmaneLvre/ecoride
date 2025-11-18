@@ -23,10 +23,14 @@
 /* HEADER */ 
 
 .admin-header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
     background-color: var(--primary);
     color: var(--text-light);
     text-align: center;
-    padding: 25px 0;
+    padding: 20px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
 }
 
@@ -35,6 +39,25 @@
     font-size: 2rem;
     margin: 0;
     letter-spacing: 1px;
+}
+
+.admin-header .logout-btn {
+    position: absolute;
+    right: 25px;
+    top: 50%;
+    transform: translateY(-50%);
+
+    background-color: #c0392b;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.admin-header .logout-btn:hover {
+    background-color: #e74c3c;
 }
 
 /* Conteneur principal */ 

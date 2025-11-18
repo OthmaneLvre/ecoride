@@ -1,0 +1,35 @@
+/* ------- RESPONSIVE DESIGN - Page leave-review.html ------- */ 
+/* Mobile (max-width: 768px) */
+
+
+@media screen and (max-width: 768px) {
+
+    .review-container {
+        width: 90%;
+        margin: 30px auto;
+        padding: 20px;
+        border-radius: 16px;
+    }
+
+    .review-container h1 {
+        font-size: 22px;
+    }
+
+    .input-group label {
+        font-size: 15px;
+    }
+
+    .stars {
+        font-size: 28px;
+    }
+
+    textarea {
+        font-size: 14px;
+        padding: 10px;
+    }
+
+    .btn-primary {
+        font-size: 15px;
+        padding: 12px;
+    }
+}

@@ -1,230 +1,199 @@
 // EcoRide - history.js
 
-
-function getStatus(ride) {
-    if (ride.manualStatus) return ride.manualStatus;
-
-    const now = new Date();
-
-    // Convertir les dates "JJ/MM/AAAA" en format ISO pour Date()
-    const [depDay, depMonth, depYear] = ride.departureDate.split("/");
-    const [arrDay, arrMonth, arrYear] = ride.arrivalDate.split("/");
-
-    const departure = new Date(`${depYear}-${depMonth.padStart(2, "0")}-${depDay.padStart(2, "0")}T${ride.departureTime}`);
-    const arrival = new Date(`${arrYear}-${arrMonth.padStart(2, "0")}-${arrDay.padStart(2, "0")}T${ride.arrivalTime}`);
-
-    if (now < departure) return "a_venir";
-    if (now >= departure && now <= arrival) return "en_cours";
-    return "termine";
-}
-
-
-// Simule l'utilisateur connecté 
-const currentUser = localStorage.getItem("currentUserName") || "Othmane";
-
-// Seclecteurs DOM 
-document.addEventListener("DOMContentLoaded", () => {
-    const upcomingContainer = document.getElementById("upcomingRides");
-    const pastContainer = document.getElementById("pastRides");
-    let trips = [];
-
-// Fonction pour charger les trajets depuis le JSON Global 
+// Fonction pour charger les trajets depuis BDD 
 async function loadTrips() {
-    try {
-        // Vérification d'une version sauvegardée dans le localStorage 
-        const savedTrips = JSON.parse(localStorage.getItem("trips"));
-        if (savedTrips && savedTrips.length > 0) {
-            const normalizedTrips = savedTrips.map(trip => ({
-                ...trip,
-                departureCity: trip.departureCity || trip.departure || "",
-                arrivalCity: trip.arrivalCity || trip.arrival || "",
-                departureDate: trip.departureDate || (trip.date ? trip.date.split("-").reverse().join("/") : ""),
-                departureTime: trip.departureTime || trip.time || "",
-                carBrand: trip.carBrand || trip.vehicle || "Inconnu",
-                carModel: trip.carModel || "",
-                manualStatus: trip.manualStatus || "a_venir",
-                seats: trip.seats || 1,
-                price: trip.price || 0
-            }));
-            trips = normalizedTrips;
+    const userId =localStorage.getItem("currentUserId");
 
-            // Mise à jour du localStoorage
-            localStorage.setItem("trips", JSON.stringify(trips));
+    // On récupère les bons conteneurs HTML 
+    const upcomingContainer = document.getElementById("upcomingRides");
+    const ongoingContainer = document.getElementById("ongoingRides");
+    const pastContainer = document.getElementById("pastRides");
+    const canceledContainer = document.getElementById("canceledRides")
 
-            console.log("Données récupérées depuis localStorage :", trips);
-            renderRides();
-            return; // Evite de recharger depuis le fichier JSON  
-        }
-
-        const response = await fetch("data/rides.json");
-        const rides = await response.json();
-
-        console.log("✅ Données JSON chargées :", rides);
-        console.log("🔍 Utilisateur courant :", currentUser);
-
-        // On filtre les trajets où l'utilisateur est chauffeur ou passager 
-        trips = rides.filter(
-            (ride) =>
-            ride.driverName === currentUser ||
-            ride.participants?.includes(currentUser)
-        );
-
-        console.log("🎯 Trajets trouvés :", trips)
-
-        renderRides(); 
-    } catch (error) {
-        console.error("Erreur lors du chargement", error);
-    }    
-}
-
-/* ---- Rendu des trajets ---- */ 
-
-function renderRides() {
     upcomingContainer.innerHTML = "";
+    ongoingContainer.innerHTML = "";
     pastContainer.innerHTML = "";
+    canceledContainer.innerHTML = "";
 
-    if (trips.length === 0) {
+    const response = await fetch("php/get_user_trips.php?id_utilisateur=" + userId);
+    const trips = await response.json();
+
+    if (!trips.length) {
         upcomingContainer.innerHTML = `<p class="no-rides">Aucun covoiturage trouvé.</p>`;
         pastContainer.innerHTML = `<p class="no-rides">Aucun covoiturage trouvé.</p>`;
         return;
     }
 
+    // Envoie des trajets à la fonction d'affichage 
+    renderRides(trips);
+}    
+
+/* --- Rendu des trajets dans les bons conteneurs --- */
+
+function renderRides(trips) {
+    const upcomingContainer = document.getElementById("upcomingRides");
+    const ongoingContainer = document.getElementById("ongoingRides");
+    const pastContainer = document.getElementById("pastRides");
+    const canceledContainer = document.getElementById("canceledRides");
+
+
+    upcomingContainer.innerHTML = "";
+    ongoingContainer.innerHTML = "";
+    pastContainer.innerHTML = "";
+    canceledContainer.innerHTML = "";
+
     for (const ride of trips) {
-        let status = ride.manualStatus ? ride.manualStatus : getStatus(ride);      
 
+        const status = (ride.statut_covoiturage || "").trim();
+
+        /* --- Mapping des status --- */ 
         let statusLabel = "";
-        if (status === "a_venir") statusLabel = '<span class="status upcoming">A venir</span>';
-        else if (status === "en_cours") statusLabel = '<span class="status ongoing">En cours</span>';
-        else statusLabel = '<span class="status ended">Terminé</span>';
+        if (status === "a_venir") statusLabel ='<span class="status upcoming">À venir</span>';
+        if (status === "en_cours") statusLabel = '<span class="status ongoing">En cours</span>';
+        if (status === "termine") statusLabel = '<span class="status ended">Terminé</span>';
+        if (status === "annule") statusLabel = '<span class="status canceled">Annulé</span>';
 
+        /* --- Bouton dynamiques --- */
         let actionButton = "";
-        if (ride.driverName === currentUser) {
+
+        // Chauffeur -> démarrer ou terminer 
+        if (ride.role === "chauffeur") {
             if (status === "a_venir") {
-                actionButton = `<button class="btn btn-start" data-id="${ride.id}">Démarrer le covoiturage</button>`;
+                actionButton += `<button class="btn btn-start" onclick="startTrip(${ride.id_covoiturage})">Démarrer</button>`;
             } else if (status === "en_cours") {
-                actionButton = `<button class="btn btn-end" data-id="${ride.id}">Arrivée à destination</button>`;
+                actionButton += `<button class="btn btn-end" onclick="endTrip(${ride.id_covoiturage}">Arrivée</button>`;
             }
         }
 
+        // Chauffeur -> Annuler 
+        if (ride.role === "chauffeur" && status === "a_venir") {
+            actionButton += `
+                <button class="btn btn-cancel" onclick="cancelRideDriver(${ride.id_covoiturage})">
+                    Annuler le covoiturage
+                </button>`;
+        }
+
+         // Passager → annuler
+        if (ride.role === "passager" && status === "a_venir") {
+            actionButton += `
+                <button class="btn btn-cancel" onclick="cancelRidePassenger(${ride.id_covoiturage})">
+                    Annuler ma réservation
+                </button>`;
+        }
+
+        /* ----- Création de la carte ----- */
         const card = document.createElement("div");
         card.classList.add("ride-card");
 
         card.innerHTML = `
             <div class="ride-header">
-                <h3>${ride.departureCity} -> ${ride.arrivalCity}</h3>
-                <span class="user-role">${ride.driverName === currentUser ? "Chauffeur" : "Passager"}</span>
+                <h3>${ride.lieu_depart} -> ${ride.lieu_arrivee}</h3>
+                <span class="user-role">${ride.role}</span>
             </div>
+            
             <div class="ride-info">
                 <p><strong>Statut :</strong> ${statusLabel}</p>
-                <p><strong>Date de départ :</strong> ${ride.departureDate} (${ride.departureTime})</p>
-                <p><strong>Véhicule :</strong> ${ride.carBrand} ${ride.carModel}</p>
-                <p><strong>Places :</strong> ${ride.seats}</p>
-            </div>
+                <p><strong>Date :</strong> ${formatDate(ride.date_depart)} (${formatTime(ride.heure_depart)}</p>
+                <p><strong>Véhicule :</strong> ${ride.marque} ${ride.modele} (${ride.couleur})</p>
+            </div>    
+
             <div class="ride-actions">
-                ${actionButton || ""}
-                ${
-                    status === "a_venir" && ride.driverName !== currentUser
-                    ? `<button class="cancel-btn" onclick="cancelRide(${ride.id})">Annuler</button>`
-                    : ""
-                }
+                ${actionButton}
             </div>    
         `;
 
-        if (status === "a_venir" || status === "en_cours") {
+        /* --- Tri dans les bons blocs --- */
+        if (status === "a_venir") {
             upcomingContainer.appendChild(card);
-        } else {
+        }
+        else if (status === "en_cours") {
+            ongoingContainer.appendChild(card);
+        }
+        else if (status === "termine") {
             pastContainer.appendChild(card);
-        } 
+        }
+        else if (status === "annule") {
+            canceledContainer.appendChild(card);
+        }
     }
+}    
+
+/* --- Bouton démarrer covoiturage --- */
+async function startTrip(id) {
+    await fetch("php/start_trip.php", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id })
+    });
+    loadTrips();
 }
 
-document.addEventListener("click", (e) => {
+/* --- Bouton Arrivée à destination --- */
+async function endTrip(id) {
+    await fetch("php/end_trip.php", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id })
+    });
+    loadTrips();
+}
 
-    // Démarrer le covoiturage 
-    if (e.target.classList.contains("btn-start")) {
-        const card = e.target.closest(".ride-card");
-        const statusSpan = card.querySelector(".status");
-        const rideId = Number.parseInt(e.target.dataset.id);
-
-        // Met à jour le texte et la classe 
-        statusSpan.textContent = "En cours";
-        statusSpan.className = "status ongoing";
-
-        // Change le bouton 
-        e.target.textContent = "Arrivée à destination";
-        e.target.classList.remove("btn-start");
-        e.target.classList.add("btn-end");
-
-        // Sauvegarde du changement dans l'objet local 
-        const ride = trips.find(r => r.id === rideId);
-        if (ride) ride.manualStatus = "en_cours";
-
-        // Sauvegarde 
-        localStorage.setItem("trips", JSON.stringify(trips));
-
-        // Message visuel 
-        alert (`Covoiturage #${e.target.dataset.id} démarré`);
-    }
-
-    // Arrivée à destination
-    else if (e.target.classList.contains("btn-end")) {
-        const card = e.target.closest(".ride-card");
-        const statusSpan = card.querySelector(".status");
-        const rideId = Number.parseInt(e.target.dataset.id);
-
-        // Met à jour le texte et la classe
-        statusSpan.textContent = "Terminé";
-        statusSpan.className = "status ended";
-
-        // Sauvegarde du changement dans l'objet local 
-        const ride = trips.find(r => r.id === rideId);
-        if (ride) ride.manualStatus = "terminé";
-
-        // Sauvegarde
-        localStorage.setItem("trips", JSON.stringify(trips));
-
-        // Retire le bouton
-        e.target.remove();
-
-        // Déplace la carte dans la section "trajets terminés"
-        const pastContainer = document.getElementById("pastRides");
-        pastContainer.appendChild(card);
-
-        // Message visuel  
-        alert(`Covoiturage #${e.target.dataset.id} terminé`);
-    }
-});
-
-/* ---- Annulation (simulation) ---- */ 
-
-globalThis.cancelRide = function (id, role) {
-    const ride = trips.find(r => r.id === id);
-    if (!ride) return;
-
-
-    // Cas chauffeur
-    if (ride.driverName === currentUser) {
-        alert(`Le covoiturage ${ride.departureCity} -> ${ride.arrivalCity} est annulé pour tous les passagers.`);
-        console.log(`Mail envoyé aux participants.`);
-    }
-
-    // Cas passager 
-    if (role === "passager") {
-        alert(`Votre participation au trajet ${ride.departureCity} -> ${ride.arrivalCity} est annulée. Une place est libérée.`);
-        console.log(`Crédit remboursé au passager ${currentUser}.`);
-    }
+/* --- Annulation (côté passager) --- */
+async function cancelRidePassenger(id_covoiturage) {
     
-    // Suppression locale (simulation)
-    trips = trips.filter(r => r.id !== id);
+    const currentUserId = localStorage.getItem("currentUserId");
 
-    // Sauvegarde temporaire 
-    localStorage.setItem("trips", JSON.stringify(trips));
+    const response = await fetch("php/cancel_passenger.php", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+            id_passager: currentUserId,
+            id_trajet: id_covoiturage
+        })
+    });
 
-    // Raffraichit l'affichage
-    renderRides();
-};
+    const result = await response.json();
 
-// --- Initialisation ---- 
+    if (result.error) {
+        alert(result.error);
+        return;
+    }
+
+    alert("Votre réservation a été annulée.");
+    loadTrips();
+}
+
+/* ---- Annulation (côté chauffeur) ---- */
+async function cancelRideDriver(id_covoiturage) {
+
+    try {
+        const response = await fetch("php/cancel_driver.php", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                id_trajet: id_covoiturage
+            })
+        });
+
+        const result = await response.json();
+
+        // Vérification si le serveur renvoie une erreur
+        if (result.error) {
+            alert(result.error);
+            return;
+        }
+
+        alert("Covoiturage annulé.");
+        loadTrips();
+
+    } catch (err) {
+        console.error("Erreur réseau:", err);
+        alert("Imposssible d'annuler le trajet");
+    }   
+}
+
+// Chargement initial 
+document.addEventListener("DOMContentLoaded", () => {
     loadTrips();
 });
 

@@ -1,189 +1,230 @@
 /* FICHIER admin.js
 Page admin.html */ 
 
-
 // Chargement du DOM 
 document.addEventListener("DOMContentLoaded", () => {
-
-    // Récupération ou initialisation des employés 
-    const employees = JSON.parse(localStorage.getItem("employees")) || [];
-
     const form = document.getElementById("createEmployeeForm");
-    const tableBody = document.getElementById("employeeTableBody");
+    const employeeTableBody = document.getElementById("employeeTableBody");
+    const userTableBody = document.getElementById("userTableBody");
     const totalCreditsElement = document.getElementById("totalCredits");
+    const roles = JSON.parse(localStorage.getItem("currentUserRoles"));
 
-    /* ---- Création d'un employé ---- */ 
-    form.addEventListener("submit", (e) => {
-        e.preventDefault();
-
-        const name = document.getElementById("empName").value.trim();
-        const email = document.getElementById("empEmail").value.trim();
-        const password = document.getElementById("empPassword").value.trim();
-
-        if (!name || !email || !password) {
-            alert ("Merci de remplir tous les champs !");
-            return;
-        }
-
-        // Vérification si un employé existe déjà avec la même adresse mail 
-        const alreadyExists = employees.some(emp => emp.email === email);
-        if (alreadyExists) {
-            alert("Un employé avec cet email existe déjà !");
-            return;
-        }
-
-        const newEmployee = {
-            id: Date.now(),
-            name,
-            email,
-            password,
-            role: "Employé",
-            suspended: false
-        };
-
-        employees.push(newEmployee);
-        localStorage.setItem("employees", JSON.stringify(employees));
-
-        form.reset();
-        displayEmployees();
-    });
-
-    /* ---- Affichage des employés ---- */ 
-
-    function displayEmployees() {
-        tableBody.innerHTML = "";
-
-        if (employees.length === 0) {
-            tableBody.innerHTML = `<tr><td colspan="4" style="text-align:center;">Aucun employé enregistré.</td></tr>`;
-            return;
-        }
-
-        for (const emp of employees) {
-            const row = document.createElement("tr");
-            row.innerHTML = `
-                <td data-label="Nom">${emp.name}</td>
-                <td data-label="Email">${emp.email}</td>
-                <td data-label="Statut">${emp.suspended ? "Suspendu" : "Actif"}</td>
-                <td data-label="Action">
-                    <button class="toggle-btn" data-id="${emp.id}">
-                        ${emp.suspended ? "Réactiver" : "Suspendre"}
-                    </button>
-                </td>    
-            `;
-            tableBody.appendChild(row);
-        };    
+    if (!roles || !roles.includes("admin")) {
+        globalThis.location.href = "login.html";
     }
 
+    let ridesChart = null;
+    let creditsChart = null;
 
-    /* SUSPENDRE / REACTIVER UN EMPLOYÉ */ 
+    /* --- 1. Chargement des utilisateurs --- */
+    async function loadUsers() {
+        try {
+            const response = await fetch("php/get_all_users.php");
+            const data = await response.json();
 
-    tableBody.addEventListener("click", (e) => {
-        if (e.target.classList.contains("toggle-btn")) {
-            const id = Number.parseInt(e.target.dataset.id);
-            const emp = employees.find(e => e.id === id);
-
-            if (emp) {
-                emp.suspended = !emp.suspended;
-                localStorage.setItem("employees", JSON.stringify(employees));
-                displayEmployees();
+            if (!data.success) {
+                console.error("Erreur chargement utilisateurs :", data.error);
+                return;
             }
+
+            const users = data.users;
+            displayUsers(users);
+            displayEmployees(users);
+
+        } catch (err) {
+            console.error("Erreur fetch get_all_users.php :", err);
         }
-    });
+    }
 
+    // Affiche les utlisateurs (passagers / chauffeurs)
+    function displayUsers(users) {
+        if (!userTableBody) return;
 
-    /* --- Affichage des utilisateurs --- */ 
-    const users = JSON.parse(localStorage.getItem("users")) || [];
-    const userTableBody = document.getElementById("userTableBody");
-
-    function displayUsers() {
         userTableBody.innerHTML = "";
 
-        if (users.length === 0) {
-            userTableBody.innerHTML = `<tr><td colspan="5" style="text-align:center;">Aucun utilisateur enregistré.</td></tr>`;
+        // On considère utilisateur = passager / chauffeur / les-deux
+        const filtered = users.filter(u =>
+            (u.roles && (
+                u.roles.includes("passager") ||
+                u.roles.includes("chauffeur") ||
+                u.roles.includes("les-deux")
+            ))
+        );
+
+        if (filtered.length === 0) {
+            userTableBody.innerHTML = `<tr><td colspan="5" style="text-align:center;">Aucun utilisateur trouvé.</td></tr>`;
             return;
         }
 
-        for (const user of users) {
+        filtered.forEach(user => {
             const row = document.createElement("tr");
+
             row.innerHTML = `
-                <td data-label="Nom">${user.name}</td>
+                <td data-label="Nom">${user.nom} ${user.prenom}</td>
                 <td data-label="Email">${user.email}</td>
-                <td data-label="Rôle">${user.role}</td>
-                <td data-label="Statut">${user.suspended ? "Suspendu" : "Actif"}</td>
+                <td data-label="Rôle">${user.roles}</td>
+                <td data-label="Statut">${user.statut}</td>
                 <td data-label="Action">
-                    <button class="toggle-user-btn" data-id="${user.id}">
-                        ${user.suspended ? "Réactiver" : "Suspendre"}
-                    </button>
+                    <button class="toggle-user-btn" data-id="${user.id_utilisateur}">
+                        ${user.statut === "actif" ? "Suspendre" : "Réactiver"}
+                    </button>        
                 </td>
             `;
+
             userTableBody.appendChild(row);
-        };
+        });
+    }
+
+    // Affiche les employés (rôle employe)
+    function displayEmployees(users) {
+        if (!employeeTableBody) return;
+
+        employeeTableBody.innerHTML = "";
+
+        const employees = users.filter(u =>
+            u.roles && u.roles.includes("employe")
+        );
+
+        if (employees.length === 0) {
+            employeeTableBody.innerHTML = `<tr><td colspan="4" style="text-align:center;">Aucun employé trouvé.</td></tr>`;
+            return;
+        }
+
+        employees.forEach(emp => {
+            const row = document.createElement("tr");
+
+            row.innerHTML = `
+                <td data-label="Nom">${emp.nom} ${emp.prenom}</td>
+                <td data-label="Email">${emp.email}</td>
+                <td data-label="Statut">${emp.statut}</td>
+                <td data-label="Action">
+                    <button class="toggle-user-btn" data-id="${emp.id_utilisateur}">
+                        ${emp.statut === "actif" ? "Suspendre" : "Réactiver"}
+                    </button>        
+                </td>
+            `;
+
+            employeeTableBody.appendChild(row);
+        });
     }
 
 
-    /* Suspendre / réactiver un utilisateur */ 
+    /* --- 2. SUSPENDRE / RÉACTIVER UN COMPTE --- */
 
-    if (userTableBody) {
-        userTableBody.addEventListener("click", (e) => {
-            if (e.target.classList.contains("toggle-user-btn")) {
-                const id = Number.parseInt(e.target.dataset.id);
-                const user = users.find(u => u.id === id);
+    document.addEventListener("click", async (e) => {
+        const btn = e.target.closest(".toggle-user-btn");
+        if (!btn) return;
 
-                if (user) {
-                    user.suspended = !user.suspended;
-                    localStorage.setItem("users", JSON.stringify(users));
-                    displayUsers();
+        const userId = btn.getAttribute("data-id");
+
+        if (!userId) {
+            console.error("ID utilisateur manquant");
+            return;
+        }
+
+        try {
+            const response = await fetch("php/suspend_user.php", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ id_utilisateur: userId })
+            });
+
+            const data = await response.json();
+
+            if (!data.success) {
+                console.error("Erreur suspension :", data.error);
+                return;
+            }
+
+            // On recharge la liste après mise à jour
+            loadUsers();
+
+        } catch (err) {
+            console.error("Erreur fetch suspend_user.php :", err);
+        }
+    });
+
+    /* --- 3. CRÉATION D'UN EMPLOYÉ --- */
+
+    if (form) {
+        form.addEventListener("submit", async (e) => {
+            e.preventDefault();
+
+            const nomComplet = document.getElementById("empName").value.trim();
+            const email = document.getElementById("empEmail").value.trim();
+            const password = document.getElementById("empPassword").value.trim();
+
+            if (!nomComplet || !email || !password) {
+                alert("Merci de remplir tous les champs !");
+                return;
+            }
+
+            // On sépare nom + prénom à partir du nom complet
+            const parts = nomComplet.split(" ");
+            const nom = parts.pop();              // dernier mot
+            const prenom = parts.join(" ") || ""; // le reste
+
+            try {
+                const response = await fetch("php/create_employee.php", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ nom, prenom, email, password })
+                });
+
+                const data = await response.json();
+
+                if (!data.success) {
+                    alert("Erreur : " + data.error);
+                    return;
                 }
+
+                alert("Employé créé avec succès !");
+                form.reset();
+                loadUsers(); // on recharge les tableaux
+
+            } catch (err) {
+                console.error("Erreur lors de la création employé :", err);
             }
         });
-    }    
+    }
 
-    /* Initialisation */ 
-    displayUsers();
+    /* --- 4. STATISTIQUES : COVOITURAGES / JOUR --- */
 
-    /* STATISTIQUES SIMULEES */
+    async function loadRidesStats() {
+        try {
+            const response = await fetch("php/get_stats_rides.php");
+            const data = await response.json();
 
-    // Simulation de covoiturages par jour 
-    const ridesPerDay = {
-        "01/11": 5,
-        "02/11": 8,
-        "03/11": 3,
-        "04/11": 7,
-        "05/11": 4,
-    };
+            if (!data.success) {
+                console.error("Erreur stats rides :", data.error);
+                return;
+            }
 
-    // Simulation des crédits gagnés par jour 
-    const creditsPerDay = {
-        "01/11": 45,
-        "02/11": 70,
-        "03/11": 35, 
-        "04/11": 65,
-        "05/11": 40,
-    };
+            const labels = data.rides.map(r => r.jour);
+            const values = data.rides.map(r => Number(r.total));
 
+            buildRidesChart(labels, values);
 
-    // Calcul du total de crédits 
-    const totalCredits = Object.values(creditsPerDay).reduce((a, b) => a + b, 0);
-    totalCreditsElement.textContent = `${totalCredits} crédits`;
+        } catch (err) {
+            console.error("Erreur fetch get_stats_rides.php :", err);
+        }
+    }
 
+    function buildRidesChart(labels, values) {
+        const ctx = document.getElementById("ridesChart");
+        if (!ctx || typeof Chart === "undefined") return;
 
-    /* GRAPHIQUES (Chart.js) */ 
+        if (ridesChart) {
+            ridesChart.destroy();
+        }
 
-    // Vérification que Chart.js est bien chargé 
-    if (typeof Chart == "undefined") {
-        console.error("Chart.js n'est pas chargé !");
-        return;
-    }    
-        
-        // Graphique des covoiturages 
-        // eslint-disable-next-line no-unused-vars
-        const ridesChart = new Chart(document.getElementById("ridesChart"), {
+        ridesChart = new Chart(ctx, {
             type: "bar",
             data: {
-                labels: Object.keys(ridesPerDay),
+                labels,
                 datasets: [{
                     label: "Covoiturages par jour",
-                    data: Object.values(ridesPerDay),
+                    data: values,
                     backgroundColor: "rgba(46, 204, 113, 0.7)",
                     borderRadius: 6
                 }]
@@ -196,16 +237,45 @@ document.addEventListener("DOMContentLoaded", () => {
                 }
             }
         });
+    }
 
-        // Graphique des crédits gagnés 
-        // eslint-disable-next-line no-unused-vars
-        const creditsChart = new Chart(document.getElementById("creditsChart"), {
+    /* --- 5. STATISTIQUES : CRÉDITS / JOUR --- */
+
+    async function loadCreditsStats() {
+        try {
+            const response = await fetch("php/get_stats_credits.php");
+            const data = await response.json();
+
+            if (!data.success) {
+                console.error("Erreur stats crédits :", data.error);
+                return;
+            }
+
+            const labels = data.credits.map(c => c.jour);
+            const values = data.credits.map(c => Number(c.total_credits));
+
+            buildCreditsChart(labels, values);
+
+        } catch (err) {
+            console.error("Erreur fetch get_stats_credits.php :", err);
+        }
+    }
+
+    function buildCreditsChart(labels, values) {
+        const ctx = document.getElementById("creditsChart");
+        if (!ctx || typeof Chart === "undefined") return;
+
+        if (creditsChart) {
+            creditsChart.destroy();
+        }
+
+        creditsChart = new Chart(ctx, {
             type: "line",
             data: {
-                labels: Object.keys(creditsPerDay),
+                labels,
                 datasets: [{
                     label: "Crédits gagnés par jour",
-                    data: Object.values(creditsPerDay),
+                    data: values,
                     borderColor: "rgba(52, 152, 219, 1)",
                     borderWidth: 2,
                     fill: false,
@@ -221,7 +291,47 @@ document.addEventListener("DOMContentLoaded", () => {
                 }
             }
         });
+    }
 
-    // Premier affichage des employés existants 
-    displayEmployees();
+    /*--- 6. TOTAL DES CRÉDITS --- */
+
+    async function loadTotalCredits() {
+        try {
+            const response = await fetch("php/get_total_credits.php");
+            const data = await response.json();
+
+            if (!data.success) {
+                console.error("Erreur total crédits :", data.error);
+                return;
+            }
+
+            const total = data.total_credits ?? 0;
+            if (totalCreditsElement) {
+                totalCreditsElement.textContent = `${total} crédits`;
+            }
+
+        } catch (err) {
+            console.error("Erreur fetch get_total_credits.php :", err);
+        }
+    }
+
+    /* --- 7. INITIALISATION GLOBALE --- */
+
+    loadUsers();
+    loadRidesStats();
+    loadCreditsStats();
+    loadTotalCredits();
+});
+
+document.addEventListener("click", (e) => {
+    if (e.target.id === "adminLogoutBtn") {
+        
+        // suppression session localStorage
+        localStorage.removeItem("currentUserId");
+        localStorage.removeItem("currentUserName");
+        localStorage.removeItem("currentUserRoles");
+
+        // redirection vers la page de login
+        globalThis.location.href = "login.html";
+    }
 });

@@ -37,9 +37,9 @@ body {
     font-family: var(--font-secondary);
     font-size: 16px;
     color: var(--text-dark);
-    background-color: #FFFFFF;
+    background-color: var(--background);
     line-height: 1.6;
-    opacity: 0;
+    opacity: 1;
     transition: opactiy 0.4s ease-in-out;
 }
 
@@ -282,7 +282,7 @@ main {
 /*SECTION 2 : Barre de recherche */
 
 .search-section {
-    background-color: #FFFFFF;
+    background-color: var(--background);
     padding: 40px 20px;
     display: flex;
     justify-content: center;
