@@ -150,11 +150,12 @@ Pour activer MongoDB dans database_logs.php (à venir) :
 
 L’application EcoRide est en ligne à l’adresse suivante :
 
-        https://ecoride.fly.dev
+        https://ecoride-project-morning-rain-797.fly.dev/index.html
 
 Déploiement utilisé : Fly.io
 
 L’application est déployée via Fly.io, une plateforme d’hébergement basée sur des conteneurs.
+Le backend fonctionne en local pour des raisons de sécurité et de simplicité, conformément aux consignes ECF
 
     Commandes principales (pour information) :
 
