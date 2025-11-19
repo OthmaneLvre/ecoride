@@ -1,0 +1,33 @@
+/* EcoRide - FEUILLE DE STYLE CSS - Page contact.html */
+
+/* --- PAGE EN CONSTRUCTION --- */
+
+.construction-container {
+    min-height: 70vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 2rem;
+}
+
+.construction-card {
+    text-align: center;
+    max-width: 500px;
+    padding: 2rem;
+    background: #ffffff;
+    border-radius: 20px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+.construction-card h1 {
+    font-family: 'Poppins', sans-serif;
+    margin-bottom: 1rem;
+    color: var(--primary-color);
+}
+
+.construction-card p {
+    font-family: 'Segoe UI', sans-serif;
+    margin-bottom: 2rem;
+    line-height: 1.5;
+    color: #555;
+}
