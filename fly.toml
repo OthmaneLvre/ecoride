@@ -3,14 +3,14 @@
 # See https://fly.io/docs/reference/configuration/ for information about how to use this file.
 #
 
-app = 'ecoride-project-damp-wind-2109'
+app = "ecoride-project-morning-rain-797"
 primary_region = 'cdg'
 
 [build]
-  dockerfile = "Dockerfile"
+  dockerfile = "docker/php/Dockerfile"
 
 [http_service]
-  internal_port = 8080
+  internal_port = 80
   force_https = true
   auto_stop_machines = true
   auto_start_machines = true
