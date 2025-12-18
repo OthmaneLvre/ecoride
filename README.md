@@ -1,3 +1,15 @@
+
+# Base de données EcoRide
+
+Les scripts SQL ont été rédigés manuellement afin de démontrer la conception
+de la base de données relationnelle du projet EcoRide.
+
+- 01_create_tables.sql : création des tables, clés primaires et étrangères
+- 02_insert_test_data.sql : jeu de données de test
+
+Un export phpMyAdmin a été utilisé comme référence, mais les scripts ont été
+réécrits volontairement pour répondre aux exigences pédagogiques du jury.
+
 Déploiement local de l'application EcoRide
 
 Ce document explique pas à pas comment installer et exécuter l’application EcoRide en local, dans un environnement Windows + XAMPP.
