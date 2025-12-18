@@ -1,24 +1,30 @@
 <?php
-
 // ---------- Connexion à la base de données EcoRide ----------
 
-// Information de connexion
-$host = 'localhost'; // Serveur local (XAMPP)
-$dbname = 'ecoride'; // Nom de la base de donnée
-$username = 'root'; // Par défaut avec XAMPP
-$password = ''; // Pas de mot de passe par défaut
+// Détection de l'environnement (Docker ou local)
+if (getenv('DOCKER_ENV') === 'true') {
+    // Environnement Docker
+    $host = 'db';              // Nom du service MySQL dans docker-compose
+    $dbname = 'ecoride';
+    $username = 'ecoride_user';
+    $password = 'ecoride_pass';
+} else {
+    // Environnement local (XAMPP)
+    $host = 'localhost';
+    $dbname = 'ecoride';
+    $username = 'root';
+    $password = '';
+}
 
 try {
-    // Connexion avec PDO
-    $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8", $username, $password);
-
-    // Configuration des attributs PDO
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
-    // Message facultatif - A commenter ensuite
-    // echo "Connexion réussie à la base de données EcoRide";
-
+    $pdo = new PDO(
+        "mysql:host=$host;dbname=$dbname;charset=utf8mb4",
+        $username,
+        $password,
+        [
+            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
+        ]
+    );
 } catch (PDOException $e) {
-    // Gestion des erreurs de connexion
-    die("Erreur de connexion à la base de données : " . $e->getMessage());
+    die("Erreur de connexion à la base de données");
 }
