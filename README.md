@@ -1,199 +1,276 @@
+# EcoRide – Application de covoiturage écologique
 
-# Base de données EcoRide
+EcoRide est une application web de covoiturage visant à favoriser les déplacements partagés
+et responsables.  
+Ce projet a été réalisé dans le cadre de l’Évaluation en Cours de Formation (ECF)
+du titre **Développeur Web Full Stack – Studi**.
 
-Les scripts SQL ont été rédigés manuellement afin de démontrer la conception
-de la base de données relationnelle du projet EcoRide.
+---
 
-- 01_create_tables.sql : création des tables, clés primaires et étrangères
-- 02_insert_test_data.sql : jeu de données de test
+## 1. Base de données EcoRide
 
-Un export phpMyAdmin a été utilisé comme référence, mais les scripts ont été
-réécrits volontairement pour répondre aux exigences pédagogiques du jury.
+Les scripts SQL ont été **rédigés manuellement** afin de démontrer la conception
+d’une base de données relationnelle cohérente et normalisée.
 
-Déploiement local de l'application EcoRide
+- `01_create_tables.sql` : création des tables, clés primaires et clés étrangères
+- `02_insert_test_data.sql` : jeu de données de test
 
-Ce document explique pas à pas comment installer et exécuter l’application EcoRide en local, dans un environnement Windows + XAMPP.
-L’objectif est de permettre au jury (ou à tout développeur) de lancer l'application sans difficulté.
+Un export phpMyAdmin a été utilisé comme **référence**, mais les scripts ont été
+**réécrits volontairement** pour répondre aux exigences pédagogiques du jury.
 
-// ==== 1. Prérequis ==== 
+---
 
-Avant d'installer EcoRide, assurez-vous d'avoir : 
+## 2. Déploiement local de l’application EcoRide
 
-    - XAMPP (Apache + SQL) 
-    - Git 
-    - Un navigateur moderne : Chrome, Firefox, Edge, etc... 
+Ce guide explique pas à pas comment installer et exécuter l’application EcoRide
+en local, dans un environnement **Windows + XAMPP**.
 
-    - Optionnel pour les logs => MongoDB Compass
+L’objectif est de permettre au jury (ou à tout développeur) de lancer l’application
+sans difficulté.
 
+---
 
-// ==== 2. Récupération du projet ==== 
+## 3. Prérequis
 
-Ouvrez un terminal puis clonez le dépôt : 
+Avant d’installer EcoRide, assurez-vous d’avoir :
 
+- XAMPP (Apache + MySQL)
+- Git
+- Un navigateur moderne (Chrome, Firefox, Edge…)
+
+**Optionnel :**
+- MongoDB Compass (pour la consultation des logs)
+
+---
+
+## 4. Récupération du projet
+
+Ouvrez un terminal puis clonez le dépôt :
+
+```bash
 git clone https://github.com/OthmaneLvre/ecoride.git
 
-Déplacez le dossier dans votre répertoire XAMPP: 
-
+Déplacez ensuite le projet dans le dossier htdocs de XAMPP :
 C:\xampp\htdocs\ecoride\
 
-ATTENTION le projet doit impérativement être placé dans htdocs pour foncitonner 
+⚠️ Important :
+Le projet doit impérativement être placé dans htdocs pour fonctionner correctement.
 
-// ==== 3. Configuration de la base de données MySQL ==== 
+5. Configuration de la base de données MySQL
+5.1 Lancer Apache et MySQL
 
-    3.1 Lancer Apache + MySQL
-        1. Ouvrez XAMPP Control Panel 
-        2. Cliquer sur Start pour Apache 
-        3. Cliquez sur Start pour MySQL 
+Ouvrez XAMPP Control Panel
 
-    3.2 Ouvrir PHPMyAdmin 
-        Allez sur 
-            http://localhost/phpmyadmin 
+Cliquez sur Start pour Apache
 
-    3.3 Créer la base de données 
-        1. Cliquez sur Nouvelle Base 
-        2. Nommez la : 
-            ecoride
-        3. Cliquez sur créer 
+Cliquez sur Start pour MySQL
 
-    3.4 Imposter le fichier SQL fourni
-        1. Cliquez sur la base ecoride
-        2. Onglet Importer
-        3. Importer le fichier 
-            /docs/ecoride.sql 
+5.2 Ouvrir phpMyAdmin
 
-Cela va créer automatiquement toutes les tables nécessaires : 
-    - utilisateur 
-    - voiture
-    - covoiturage
-    - participe
-    - avis
-    - role
-    - utilisateur_role
-    - etc...
+Rendez-vous sur :
+http://localhost/phpmyadmin
 
-// ==== 4. Configuration du fichier de connexion PHP ====     
+5.3 Créer la base de données
 
-Dans le fichier 
+Cliquez sur Nouvelle base de données
+
+Nom : ecoride
+
+Cliquez sur Créer
+
+5.4 Importer le script SQL
+
+Sélectionnez la base ecoride
+
+Onglet Importer
+
+Importez le fichier :
+
+/docs/ecoride.sql
+
+Cela crée automatiquement toutes les tables nécessaires :
+
+utilisateur
+
+voiture
+
+covoiturage
+
+participe
+
+avis
+
+role
+
+utilisateur_role
+
+etc.
+
+
+6. Configuration de la connexion PHP
+
+Dans le fichier :
+
 /php/database.php
 
-Vérifiez que les identifiants correspondent à votre installation local : 
-    $$host = "localhost";
-    $dbname = "ecoride";
-    $username = "root";
-    $password = ""; // Mot de passe vide par défaut sous XAMPP
+$host = "localhost";
+$dbname = "ecoride";
+$username = "root";
+$password = ""; // Mot de passe vide par défaut sous XAMPP
 
-Si vous utilisez un mot de passe MySQL personnalisé, mettez-le ici. 
-
-// ==== 5. Lancement de l'application ====     
-
-Une fois Apache et MySQL lancés, l'applicaiton est accessible via : 
-    http://localhost/ecoride/index.html
-
-Vous arrivez sur la plage d'accueil de l'application 
-
-// ==== 6. Comptes de test ====     
-
-Pour facilier l'évaluation, plusieurs comptes sont fournis :
-
-    - UTILISATEUR - deux rôles
-        Email : user@test.com
-        MDP : Test@123
-
-    - UTILISATEUR - Chauffeur 
-        Email : driver@test.com
-        MDP : Test@123
-
-    - UTILISATEUR - Passager 
-        Email : passenger@test.com
-        MDP : Test@123
-
-    - Employé 
-        Email : employee@test.com
-        MDP : Test@123
-
-    - Administrateur  
-        Email : admin@test.com
-        MDP : Test@123
+Si votre installation MySQL utilise un mot de passe, renseignez-le ici.
 
 
-// ==== 7. Tests Complémentaires ====  
 
-    - Envoi de mails
+7. Lancement de l’application
 
-L’application simule l’envoi des mails côté PHP.
+Une fois Apache et MySQL démarrés, l’application est accessible à l’adresse :
+
+http://localhost/ecoride/index.html
+
+
+Vous arrivez sur la page d’accueil de l’application EcoRide.
+
+
+8. Comptes de test
+
+Pour faciliter l’évaluation, plusieurs comptes sont fournis :
+
+Utilisateur – deux rôles
+
+Email : user@test.com
+
+Mot de passe : Test@123
+
+Chauffeur
+
+Email : driver@test.com
+
+Mot de passe : Test@123
+
+Passager
+
+Email : passenger@test.com
+
+Mot de passe : Test@123
+
+Employé
+
+Email : employee@test.com
+
+Mot de passe : Test@123
+
+Administrateur
+
+Email : admin@test.com
+
+Mot de passe : Test@123
+
+
+9. Fonctionnalités complémentaires
+Envoi de mails
+
+L’application simule l’envoi de mails côté PHP.
 Aucune configuration SMTP n’est requise pour les tests.
 
-    - Logs (MongoDB – optionnel)
+Logs (MongoDB – optionnel)
 
-Pour activer MongoDB dans database_logs.php (à venir) :
+Un système de logs peut être activé via MongoDB (optionnel).
 
-    - Installer MongoDB Compass
+Installer MongoDB Compass
 
-    - Lancer le serveur
+Lancer le serveur MongoDB
 
-    - Modifier la chaîne de connexion MongoDB si besoin.
-
-// ==== 8. Arborescence technique (résumé) ==== 
-
-            ecoride/
-            │── index.html
-            │── signup.html
-            │── login.html
-            │── home.html
-            │── details.html
-            │── user-space.html
-            │── history.html
-            │── employee.html
-            │── admin.html
-            │
-            ├── css/
-            ├── js/
-            ├── assets/
-            ├── php/
-            │   ├── database.php
-            │   ├── endpoints...
-            │
-            └── docs/
-                └── Charte_graphique.pdf
-                └── ecoride.sql
+Adapter la chaîne de connexion si nécessaire
 
 
-// ==== 9. Déploiment sur Fly.io ====
+## Déploiement avec Docker
 
-L’application EcoRide est en ligne à l’adresse suivante :
+L’application EcoRide utilise **Docker** dans le cadre de son déploiement en production.
 
-        https://ecoride-project-morning-rain-797.fly.dev/index.html
+Un conteneur Docker permet de :
+- garantir un environnement d’exécution identique
+- faciliter le déploiement sur Fly.io
+- isoler les dépendances serveur (Apache, PHP)
 
-Déploiement utilisé : Fly.io
+Le Dockerfile est utilisé exclusivement pour le déploiement et **n’est pas requis pour l’exécution locale** de l’application lors de l’évaluation.
 
-L’application est déployée via Fly.io, une plateforme d’hébergement basée sur des conteneurs.
-Le backend fonctionne en local pour des raisons de sécurité et de simplicité, conformément aux consignes ECF
+### Architecture Docker
 
-    Commandes principales (pour information) :
+- Image basée sur PHP + Apache
+- Copie du code source dans le conteneur
+- Exposition du port HTTP
+- Lancement du serveur Apache en mode production
 
-    Installer Flyctl
-        iwr https://fly.io/install.ps1 -useb | iex
+La configuration Docker est volontairement simple et adaptée à un projet pédagogique.
 
-    Connexion 
-        flyctl auth login
 
-    Initialisation du projet
-        flyctl launch
+10. Arborescence technique (résumé)
+ecoride/
+│── index.html
+│── signup.html
+│── login.html
+│── listings.html
+│── details.html
+│── user-space.html
+│── history.html
+│── employee-space.html
+│── admin.html
+│
+├── docker/
+├── sql/
+├── partials/
+├── data/
+├── vendor/
+├── css/
+├── js/
+├── assets/
+├── php/
+│   ├── Core/
+│   ├── Services/
+│   ├── endpoints PHP
+│
+└── docs/
+    ├── ecoride.sql
+    └── Charte_graphique.pdf
 
-    Déploiement
-        flyctl deploy
 
-// ==== 10. Application prêtes à l'usage ==== 
 
-Si vous avez suivi les étapes :
 
-    ✔ Serveur Apache → OK
-    ✔ MySQL + base importée → OK
-    ✔ Fichier /php/database.php configuré → OK
-    ✔ Projet dans /htdocs → OK
+11. Déploiement sur Fly.io
 
-Vous pouvez utiliser EcoRide localement sans aucun problème 
+L’application EcoRide est accessible en ligne à l’adresse :
 
+https://ecoride-project-morning-rain-797.fly.dev
+
+Hébergement
+
+Plateforme : Fly.io
+
+Déploiement basé sur Docker
+
+Secrets gérés via Fly.io Secrets
+
+Le backend est également exploitable en local, conformément aux consignes ECF.
+
+Commandes principales (à titre informatif)
+flyctl auth login
+flyctl launch
+flyctl deploy
+
+12. Application prête à l’usage
+
+Si les étapes précédentes ont été suivies :
+
+✔ Apache actif
+
+✔ MySQL actif et base importée
+
+✔ Connexion PHP configurée
+
+✔ Projet placé dans htdocs
+
+👉 L’application EcoRide est pleinement fonctionnelle en local.
 
 
 Auteur
