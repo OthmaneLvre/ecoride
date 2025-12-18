@@ -1,28 +1,19 @@
 <?php
 
-require_once 'db_connect.php';
+require_once __DIR__ . '/Services/UserService.php';
+require_once __DIR__ . '/Services/TripService.php';
 
-// Fonction pour réucpérer tous les utilisateurs
-function getAllUsers($pdo) {
-    try {
-        $sql = "SELECT * FROM utilisateur";
-        $stmt = $pdo->prepare($sql);
-        $stmt->execute();
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
-    } catch (PDOException $e) {
-        die("Erreur lors de la récupération des utilisateurs : " . $e->getMessage());
-    }
+/**
+ * Compatibilité avec l'ancien code procédural
+ * La logique métier est désormais centralisée dans les services
+ */
+
+function getAllUsers(): array
+{
+    return (new UserService())->getAllUsers();
 }
 
-/* Fonction pour récupérer les covoiturages */
-
-function getAllTrips($pdo) {
-    try {
-        $sql = "SELECT * FROM covoiturage";
-        $stmt = $pdo->prepare($sql);
-        $stmt->execute();
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
-    } catch (PDOException $e) {
-        die("Erreur lors de la récupération des covoiturages : " . $e->getMessage());
-    }
+function getAllTrips(): array
+{
+    return (new TripService())->getAllTrips();
 }
